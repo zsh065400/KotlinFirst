@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Indicator">
+        <attr name="numbers"
+              format="integer"></attr>
+        <attr name="radius"
+              format="float"></attr>
+        <attr name="forceColor"
+              format="reference|color"></attr>
+        <attr name="backColor"
+              format="reference|color"></attr>
+    </declare-styleable>
+</resources>

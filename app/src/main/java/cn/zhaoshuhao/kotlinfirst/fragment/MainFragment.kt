@@ -3,6 +3,7 @@ package cn.zhaoshuhao.kotlinfirst.fragment
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,15 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         id_vp_banner.adapter = BannerAdapter(context, mBannerRes)
+        id_vp_banner.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                id_indicator.setOffset(position, positionOffset)
+            }
+
+            override fun onPageSelected(position: Int) {}
+
+            override fun onPageScrollStateChanged(state: Int) {}
+        })
     }
 
     override fun onResume() {
