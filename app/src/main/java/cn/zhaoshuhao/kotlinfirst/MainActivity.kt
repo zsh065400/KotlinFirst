@@ -4,18 +4,19 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTabHost
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
-import cn.zhaoshuhao.kotlinfirst.fragment.ARoundFragment
-import cn.zhaoshuhao.kotlinfirst.fragment.MainFragment
-import cn.zhaoshuhao.kotlinfirst.fragment.MineFragment
-import cn.zhaoshuhao.kotlinfirst.fragment.MoreFragment
+import cn.zhaoshuhao.kotlinfirst.fragment.*
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity(), CheckoutToolbar {
     val mTabText = arrayOf("主页", "周边", "我的", "更多")
+
     val mTabIcon = arrayOf(R.drawable.ic_tab_artists, R.drawable.ic_tab_albums,
             R.drawable.ic_tab_songs, R.drawable.ic_tab_playlists)
     val mTabTarget = arrayOf(MainFragment::class.java, ARoundFragment::class.java,
@@ -25,6 +26,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+//        id_main_toolbar.title = "主页"
+        setSupportActionBar(id_main_toolbar)
+//        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+//        supportActionBar!!.setHomeButtonEnabled(true)
+//        id_main_toolbar.menu
+//        id_main_toolbar.subtitle
+//        id_main_toolbar.inflateMenu()
+//        id_main_toolbar.navigationIcon
+//        id_main_toolbar.logo
+
         val tabhost: FragmentTabHost = findViewById(android.R.id.tabhost) as FragmentTabHost
         tabhost.setup(this, supportFragmentManager, android.R.id.tabcontent)
         mTabText.forEach {
@@ -33,6 +44,24 @@ class MainActivity : AppCompatActivity() {
             inflate.findViewById<ImageView>(R.id.id_iv_tab_icon).setImageResource(mTabIcon[index])
             inflate.findViewById<TextView>(R.id.id_tv_tab_text).text = it
             tabhost.addTab(tabhost.newTabSpec(it).setIndicator(inflate), mTabTarget[index], null)
+        }
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun toTarget(fragment: Fragment) {
+        when (fragment) {
+            is MainFragment -> title = mTabText[0]
+            is ARoundFragment -> title = mTabText[1]
+            is MineFragment -> title = mTabText[2]
+            is MoreFragment -> title = mTabText[3]
         }
     }
 }
@@ -48,4 +77,3 @@ fun <T> Activity.startActivity(other: Class<T>) {
 inline fun <reified T : Context> Activity.startActivity() {
     startActivity(T::class.java)
 }
-

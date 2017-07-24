@@ -23,4 +23,8 @@ class MineFragment : Fragment() {
         id_tv_blank.text = "我的"
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkout(activity as CheckoutToolbar)
+    }
 }

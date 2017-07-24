@@ -23,4 +23,9 @@ class MoreFragment : Fragment() {
         id_tv_blank.text = "更多"
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkout(activity as CheckoutToolbar)
+    }
+
 }

@@ -3,6 +3,7 @@ package cn.zhaoshuhao.kotlinfirst.fragment
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,6 @@ class MainFragment : Fragment() {
     val mBannerRes = intArrayOf(R.mipmap.banner01, R.mipmap.banner02, R.mipmap.banner03)
     val mCallback = Handler()
 
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val inflate = inflater?.inflate(R.layout.fragment_main, container, false)
         return inflate
@@ -28,11 +28,21 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         id_vp_banner.adapter = BannerAdapter(context, mBannerRes)
+        id_vp_banner.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                id_indicator.setOffset(position, positionOffset)
+            }
+
+            override fun onPageSelected(position: Int) {}
+
+            override fun onPageScrollStateChanged(state: Int) {}
+        })
     }
 
     override fun onResume() {
         super.onResume()
         mCallback.postDelayed(mAutoScroll, 3000)
+        checkout(activity as CheckoutToolbar)
     }
 
     override fun onStop() {
@@ -48,6 +58,14 @@ class MainFragment : Fragment() {
             mCallback.postDelayed(this, 3000)
         }
     }
+}
+
+interface CheckoutToolbar {
+    fun toTarget(fragment: Fragment)
+}
+
+fun Fragment.checkout(callback: CheckoutToolbar) {
+    callback.toTarget(this)
 }
 
 
