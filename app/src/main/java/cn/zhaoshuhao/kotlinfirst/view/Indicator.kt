@@ -31,6 +31,7 @@ class Indicator : View {
             val backColorResId = typedArray.getResourceId(R.styleable.Indicator_backColor, 0)
             mBackColor = if (backColorResId != 0) resources.getColor(backColorResId) else
                 typedArray.getColor(R.styleable.Indicator_backColor, mBackColor)
+            typedArray.recycle()
         }
 
         initPaint()
@@ -46,7 +47,7 @@ class Indicator : View {
     var mBackColor = Color.GRAY
     var mPaddingLeft = 20
     var mPaddingRight = 20
-    var dip: Int = 0
+    var dpiX: Float = 0f
 
     fun setOffset(position: Int, positionOffset: Float): Unit {
         val index = position % mNumbers
@@ -81,13 +82,13 @@ class Indicator : View {
         var width = widthSpec
         var height = heightSpec
 
-        dip = resources.displayMetrics.densityDpi / 160
+        dpiX = (resources.displayMetrics.densityDpi / 160).toFloat()
 
         if (widthMode == MeasureSpec.AT_MOST) {
             width = ((mPaddingLeft * 2) + (mNumbers * mRadius * 2) + ((mNumbers - 1) * mRadius)).toInt()
         }
         if (heightMode == MeasureSpec.AT_MOST) {
-            height = (mRadius.toInt() * 2 * dip + 0.5).toInt()
+            height = (mRadius * 2 * dpiX + 0.5).toInt()
         }
         setMeasuredDimension(width, height)
     }
@@ -95,7 +96,7 @@ class Indicator : View {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         var i = 0
-        val y: Float = (mRadius * dip + 0.5).toFloat()
+        val y: Float = (mRadius * dpiX + 0.5).toFloat()
         while (i < mNumbers) {
             canvas?.drawCircle(mPaddingLeft + mRadius + i * mRadius * 3f, y, mRadius, mBackPaint)
             i++

@@ -23,4 +23,8 @@ class ARoundFragment : Fragment() {
         id_tv_blank.text = "周边"
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkout(activity as CheckoutToolbar)
+    }
 }

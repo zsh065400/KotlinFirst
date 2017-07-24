@@ -20,7 +20,6 @@ class MainFragment : Fragment() {
     val mBannerRes = intArrayOf(R.mipmap.banner01, R.mipmap.banner02, R.mipmap.banner03)
     val mCallback = Handler()
 
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val inflate = inflater?.inflate(R.layout.fragment_main, container, false)
         return inflate
@@ -43,6 +42,7 @@ class MainFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         mCallback.postDelayed(mAutoScroll, 3000)
+        checkout(activity as CheckoutToolbar)
     }
 
     override fun onStop() {
@@ -58,6 +58,14 @@ class MainFragment : Fragment() {
             mCallback.postDelayed(this, 3000)
         }
     }
+}
+
+interface CheckoutToolbar {
+    fun toTarget(fragment: Fragment)
+}
+
+fun Fragment.checkout(callback: CheckoutToolbar) {
+    callback.toTarget(this)
 }
 
 
