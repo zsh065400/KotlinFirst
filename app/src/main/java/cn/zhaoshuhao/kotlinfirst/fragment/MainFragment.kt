@@ -7,8 +7,12 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridView
 import cn.zhaoshuhao.kotlinfirst.Adapter.BannerAdapter
+import cn.zhaoshuhao.kotlinfirst.Adapter.GridAdapter
+import cn.zhaoshuhao.kotlinfirst.Adapter.ItemAdapter
 import cn.zhaoshuhao.kotlinfirst.R
+import cn.zhaoshuhao.kotlinfirst.utils.ItemInfo
 import kotlinx.android.synthetic.main.fragment_main.*
 
 /**
@@ -37,6 +41,41 @@ class MainFragment : Fragment() {
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
+
+        initItemGrid()
+    }
+
+    fun initItemGrid() {
+        val list = mutableListOf<View>()
+        val page1 = mutableListOf<ItemInfo>()
+        val page2 = mutableListOf<ItemInfo>()
+        val stringArray = resources.getStringArray(R.array.home_bar_labels)
+        val typedArray = resources.obtainTypedArray(R.array.home_bar_icon)
+
+        var i = 0
+        while (i < 16) {
+            if (i < 8) {
+                val itemInfo = ItemInfo(stringArray[i], typedArray.getResourceId(i, 0))
+                page1.add(itemInfo)
+            } else {
+                val itemInfo = ItemInfo(stringArray[i], typedArray.getResourceId(i, 0))
+                page2.add(itemInfo)
+            }
+            i++
+        }
+
+        val view1 = LayoutInflater.from(this.context).inflate(R.layout.grid_view, null, false)
+        val grid1 = view1?.findViewById<GridView>(R.id.id_grid_item)
+        grid1?.adapter = GridAdapter(this.context, page1)
+
+        val view2 = LayoutInflater.from(this.context).inflate(R.layout.grid_view, null, false)
+        val grid2 = view2?.findViewById<GridView>(R.id.id_grid_item)
+        grid2?.adapter = GridAdapter(this.context, page2)
+
+        list.add(view1)
+        list.add(view2)
+
+        id_vp_item.adapter = ItemAdapter(this.context, list)
     }
 
     override fun onResume() {
