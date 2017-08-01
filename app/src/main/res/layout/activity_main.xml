@@ -11,14 +11,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
+        <include
             android:id="@+id/id_main_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            app:titleTextColor="@android:color/white">
-
-        </android.support.v7.widget.Toolbar>
+            layout="@layout/toolbar"/>
 
         <FrameLayout
             android:id="@android:id/tabcontent"

@@ -7,11 +7,13 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTabHost
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import cn.zhaoshuhao.kotlinfirst.fragment.*
+import cn.zhaoshuhao.kotlinfirst.helper.customToolbar
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), CheckoutToolbar {
@@ -27,7 +29,12 @@ class MainActivity : AppCompatActivity(), CheckoutToolbar {
         setContentView(R.layout.activity_main)
 
 //        id_main_toolbar.title = "主页"
-        setSupportActionBar(id_main_toolbar)
+//        customToolbar(id_main_toolbar as Toolbar){
+//            setSupportActionBar(this)
+//        }
+        with(id_main_toolbar as Toolbar){
+            setSupportActionBar(this)
+        }
 //        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 //        supportActionBar!!.setHomeButtonEnabled(true)
 //        id_main_toolbar.menu

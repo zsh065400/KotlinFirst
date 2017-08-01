@@ -2,23 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:layout_margin="1dp"
               android:gravity="center"
               android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/id_iv_tab_icon"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:scaleType="fitXY"
-        android:src="@mipmap/ic_launcher"/>
+        android:id="@+id/id_iv_grid_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/icon_home_3"/>
 
     <TextView
-        android:textColor="@color/tab_text"
-        android:id="@+id/id_tv_tab_text"
+        android:id="@+id/id_tv_grid_text"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="测试"
-        android:textSize="15dp"/>
+        android:textSize="10dp"/>
 
 </LinearLayout>

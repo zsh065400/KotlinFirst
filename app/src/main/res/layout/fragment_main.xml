@@ -8,12 +8,12 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="100dp">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/id_vp_banner"
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="match_parent">
 
         </android.support.v4.view.ViewPager>
 
@@ -23,9 +23,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             app:backColor="@android:color/black"
-            app:forceColor="#ff0000"
+            app:forceColor="#000000"
             app:numbers="3"
-            app:radius="25"/>
+            app:radius="10"/>
     </FrameLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/id_vp_item"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+    </android.support.v4.view.ViewPager>
 
 </LinearLayout>
