@@ -1,11 +1,14 @@
-package cn.zhaoshuhao.kotlinfirst
+package cn.zhaoshuhao.kotlinfirst.ui.activity
 
 import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
-import cn.zhaoshuhao.kotlinfirst.Adapter.GuideAdapter
+import cn.zhaoshuhao.kotlinfirst.R
+import cn.zhaoshuhao.kotlinfirst.adapter.GuideAdapter
 import kotlinx.android.synthetic.main.activity_guide.*
 
 class GuideActivity : AppCompatActivity() {
@@ -20,6 +23,10 @@ class GuideActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        /*设置全屏*/
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
         setContentView(R.layout.activity_guide)
 
         id_vp_guide.adapter = mAdapter

@@ -17,7 +17,7 @@
 
         </android.support.v4.view.ViewPager>
 
-        <cn.zhaoshuhao.kotlinfirst.view.Indicator
+        <cn.zhaoshuhao.kotlinfirst.ui.view.Indicator
             android:id="@+id/id_indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,8 +31,14 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/id_vp_item"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="130dp">
 
     </android.support.v4.view.ViewPager>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/id_recv_film"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>

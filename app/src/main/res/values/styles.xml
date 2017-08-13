@@ -9,12 +9,20 @@
         <item name="colorAccent">@color/colorAccent</item>
         <!--<item name="windowNoTitle">true</item>-->
         <!--<item name="android:windowNoTitle">true</item>-->
+        <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowStyle</item>
+    </style>
+
+    <style name="AppTheme.DrawerArrowStyle"
+           parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/white</item>
     </style>
 
     <style name="SplashStyle"
            parent="AppTheme">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowIsTranslucent">true</item>
+        <!--<item name="windowNoTitle">true</item>-->
+        <!--<item name="android:windowNoTitle">true</item>-->
     </style>
 
 </resources>
