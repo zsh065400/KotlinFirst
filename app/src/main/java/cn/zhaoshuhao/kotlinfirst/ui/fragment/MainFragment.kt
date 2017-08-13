@@ -4,15 +4,16 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
-import cn.zhaoshuhao.kotlinfirst.Adapter.BannerAdapter
-import cn.zhaoshuhao.kotlinfirst.Adapter.GridAdapter
-import cn.zhaoshuhao.kotlinfirst.Adapter.ItemAdapter
+import android.widget.Toast
 import cn.zhaoshuhao.kotlinfirst.R
-import cn.zhaoshuhao.kotlinfirst.utils.ItemInfo
+import cn.zhaoshuhao.kotlinfirst.adapter.*
+import cn.zhaoshuhao.kotlinfirst.model.bean.FilmItem
+import cn.zhaoshuhao.kotlinfirst.model.bean.ItemInfo
 import kotlinx.android.synthetic.main.fragment_main.*
 
 /**
@@ -43,6 +44,7 @@ class MainFragment : Fragment() {
         })
 
         initItemGrid()
+        initFilmRecv()
     }
 
     fun initItemGrid() {
@@ -76,6 +78,27 @@ class MainFragment : Fragment() {
         list.add(view2)
 
         id_vp_item.adapter = ItemAdapter(this.context, list)
+    }
+
+    private fun initFilmRecv() {
+        id_recv_film.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+//        id_recv_film.addItemDecoration(DividerItemDecoration(this.context, LinearLayoutManager.HORIZONTAL))
+        val datas = ArrayList<FilmItem>()
+        val film1 = FilmItem("", "战狼2", "25.0")
+        val film2 = FilmItem("", "战狼", "20.0")
+        val film3 = FilmItem("", "建军大业", "35.0")
+        val film4 = FilmItem("", "三生三世十里桃花", "25.0")
+        val film5 = FilmItem("", "鬼吹灯", "35.0")
+        datas.add(film1)
+        datas.add(film2)
+        datas.add(film3)
+        datas.add(film4)
+        datas.add(film5)
+        id_recv_film.adapter = FilmAdapter(this.context, datas, object : BaseSupportAdapter.OnItemClickListener<FilmItem> {
+            override fun onClick(data: FilmItem, position: Int) {
+                Toast.makeText(this@MainFragment.context, data.name, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onResume() {

@@ -1,9 +1,10 @@
-package cn.zhaoshuhao.kotlinfirst
+package cn.zhaoshuhao.kotlinfirst.ui.activity
 
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import cn.zhaoshuhao.kotlinfirst.R
 
 class SplashActivity : AppCompatActivity() {
 
@@ -12,6 +13,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_splash)
 
         mHandler.postDelayed({

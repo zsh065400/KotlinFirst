@@ -7,8 +7,6 @@ import android.view.View
  * Created by Scout
  * Created on 2017/7/28 19:53.
  */
-data class ItemInfo(val text: String, val icon: Int)
-
 /*
 * 利用接收者是同一对象的原理，扩展获取其保存的值并作单独缓存
 * */

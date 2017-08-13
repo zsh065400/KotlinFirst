@@ -9,6 +9,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import cn.zhaoshuhao.kotlinfirst.ui.activity.MainActivity;
+
 import static org.junit.Assert.assertEquals;
 
 /**
