@@ -1,59 +1,76 @@
 package cn.zhaoshuhao.kotlinfirst.ui.activity
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.Menu
-import android.view.MenuItem
 import cn.zhaoshuhao.kotlinfirst.R
+import cn.zhaoshuhao.kotlinfirst.base.BaseActivity
+import cn.zhaoshuhao.kotlinfirst.base.toast
+import cn.zhaoshuhao.kotlinfirst.contract.MainPresent
 import cn.zhaoshuhao.kotlinfirst.fragment.*
-import cn.zhaoshuhao.kotlinfirst.utils.LogType
-import cn.zhaoshuhao.kotlinfirst.utils.componet
-import cn.zhaoshuhao.kotlinfirst.utils.log
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 
-class MainActivity : AppCompatActivity(), CheckoutToolbar {
-    val mTabText = arrayOf("主页", "周边", "购物车", "我的")
+class MainActivity : BaseActivity(), CheckoutToolbar {
+    private val mTabText = arrayOf("主页", "周边", "已购", "我的")
 
-    val mTabIcon = arrayOf(R.drawable.ic_tab_artists, R.drawable.ic_tab_albums,
+    private val mTabIcon = arrayOf(R.drawable.ic_tab_artists, R.drawable.ic_tab_albums,
             R.drawable.ic_tab_cart, R.drawable.ic_tab_songs)
 
-    val mTabTarget = arrayOf(MainFragment(), ARoundFragment(),
-            MineFragment(), MoreFragment())
-
-    val logd = (::log.componet())(LogType.DEBUG)(MainActivity::class.java.toString())
+    val mTabTarget by lazy {
+        val mainFragment = MainFragment()
+        val mainPresent = MainPresent()
+        mainFragment.setPresent(mainPresent)
+        mainPresent.setView(mainFragment)
+        arrayOf(mainFragment, ARoundFragment(),
+                MineFragment(), MoreFragment())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        initViews()
         setDefaultFragment();
     }
 
-    private fun initViews() {
-        initToolbar()
+    override fun obtainLayoutID(): Int = R.layout.activity_main
+
+    override fun initViews() {
+        super.initViews()
         initDrawer()
         initBottomNavigationBar()
     }
 
-    private fun initToolbar() = with(id_main_toolbar as Toolbar) {
+    override fun initToolbar(): Unit = with(id_toolbar as Toolbar) {
         setSupportActionBar(this)
         supportActionBar?.setHomeButtonEnabled(true); //设置返回键可用
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
+        setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.id_main_location -> {
+                    toast("定位")
+                    true
+                }
+                R.id.id_main_search -> {
+                    false
+                }
+                R.id.id_main_scan -> {
+                    toast("扫描")
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun initDrawer() = with(id_main_drawer) {
-        val toggle = ActionBarDrawerToggle(this@MainActivity, this, id_main_toolbar as Toolbar, R.string.drawer_open, R.string.drawer_close)
+        val toggle = ActionBarDrawerToggle(this@MainActivity, this, id_toolbar as Toolbar, R.string.drawer_open, R.string.drawer_close)
         toggle.syncState()
         addDrawerListener(toggle)
     }
@@ -75,11 +92,11 @@ class MainActivity : AppCompatActivity(), CheckoutToolbar {
             override fun onTabUnselected(position: Int) {}
             override fun onTabSelected(position: Int) {
                 if (mCurIndex == position) return
+                supportFragmentManager.beginTransaction()
                 supportFragmentManager.beginTransaction().replace(R.id.id_main_fragment_content, mTabTarget[position]).commit()
                 logd(position.toString())
                 mCurIndex = position
             }
-
         })
     }
 
@@ -88,12 +105,28 @@ class MainActivity : AppCompatActivity(), CheckoutToolbar {
         supportFragmentManager.beginTransaction().replace(R.id.id_main_fragment_content, mTabTarget[0]).commit()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        return super.onCreateOptionsMenu(menu)
+    override fun obtainMenuRes(): Int {
+        return R.menu.main_activity_toolbar
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return super.onOptionsItemSelected(item)
+    override fun initMenuAction(menu: Menu?) {
+        val item = menu?.findItem(R.id.id_main_search)
+        val searchView: SearchView = MenuItemCompat.getActionView(item) as SearchView
+        searchView.isIconified = true
+        searchView.queryHint = "吃喝玩乐"
+        /*获取组件中控件的id，并通过id获得控件对象，修改其属性*/
+        val searchTv: SearchView.SearchAutoComplete = searchView.findViewById(R.id.search_src_text)
+        searchTv.setTextColor(Color.WHITE)
+        searchTv.setHintTextColor(Color.WHITE)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                logd("submit ${query ?: "empty"}"); return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                logd("text change : ${newText ?: "empty"}"); return false
+            }
+        })
     }
 
     override fun onBackPressed() {
@@ -114,16 +147,5 @@ class MainActivity : AppCompatActivity(), CheckoutToolbar {
     }
 }
 
-fun <T> Activity.startActivity(other: Class<T>) {
-    val target = Intent(this, other)
-    startActivity(target)
-    //设置进入和退出动画
-    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-    finish()
-}
-
-inline fun <reified T : Context> Activity.startActivity() {
-    startActivity(T::class.java)
-}
 
 

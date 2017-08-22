@@ -7,70 +7,78 @@ import android.support.v4.view.ViewPager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.GridView
 import android.widget.Toast
 import cn.zhaoshuhao.kotlinfirst.R
 import cn.zhaoshuhao.kotlinfirst.adapter.*
-import cn.zhaoshuhao.kotlinfirst.model.bean.FilmItem
-import cn.zhaoshuhao.kotlinfirst.model.bean.ItemInfo
+import cn.zhaoshuhao.kotlinfirst.base.BaseFragment
+import cn.zhaoshuhao.kotlinfirst.contract.Main
+import cn.zhaoshuhao.kotlinfirst.model.bean.TypeInfo
+import cn.zhaoshuhao.kotlinfirst.model.network.entity.Banner
+import cn.zhaoshuhao.kotlinfirst.model.network.entity.Film
+import cn.zhaoshuhao.kotlinfirst.model.network.entity.GuessYouLike
+import cn.zhaoshuhao.kotlinfirst.ui.view.Indicator
 import kotlinx.android.synthetic.main.fragment_main.*
 
 /**
  * Created by Scout
  * Created on 2017/7/19 18:42.
  */
-class MainFragment : Fragment() {
+class MainFragment : BaseFragment(), Main.View {
 
-    val mBannerRes = intArrayOf(R.mipmap.banner01, R.mipmap.banner02, R.mipmap.banner03)
-    val mCallback = Handler()
+    private lateinit var mainPresent: Main.Present
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val inflate = inflater?.inflate(R.layout.fragment_main, container, false)
-        return inflate
+    override fun setPresent(present: Main.Present) {
+        this.mainPresent = present
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        id_vp_banner.adapter = BannerAdapter(context, mBannerRes)
+    override fun obtainLayoutID(): Int = R.layout.fragment_main
+
+    override fun initView(view: View?, savedBundle: Bundle?) {
+        mainPresent.start()
+        initItemGrid()
+    }
+
+    val mCallback = Handler()
+
+    override fun initBanner(banners: ArrayList<Banner>) {
+        id_vp_banner.adapter = BannerAdapter(context, banners)
+        id_banner_indicator.mNumbers = banners.size
         id_vp_banner.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                id_indicator.setOffset(position, positionOffset)
+                id_banner_indicator.setOffset(position, positionOffset)
             }
 
             override fun onPageSelected(position: Int) {}
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-
-        initItemGrid()
-        initFilmRecv()
     }
 
-    fun initItemGrid() {
+    private fun initItemGrid() {
         val list = mutableListOf<View>()
-        val page1 = mutableListOf<ItemInfo>()
-        val page2 = mutableListOf<ItemInfo>()
+        val page1 = mutableListOf<TypeInfo>()
+        val page2 = mutableListOf<TypeInfo>()
         val stringArray = resources.getStringArray(R.array.home_bar_labels)
         val typedArray = resources.obtainTypedArray(R.array.home_bar_icon)
 
         var i = 0
         while (i < 16) {
             if (i < 8) {
-                val itemInfo = ItemInfo(stringArray[i], typedArray.getResourceId(i, 0))
+                val itemInfo = TypeInfo(stringArray[i], typedArray.getResourceId(i, 0))
                 page1.add(itemInfo)
             } else {
-                val itemInfo = ItemInfo(stringArray[i], typedArray.getResourceId(i, 0))
+                val itemInfo = TypeInfo(stringArray[i], typedArray.getResourceId(i, 0))
                 page2.add(itemInfo)
             }
             i++
         }
 
-        val view1 = LayoutInflater.from(this.context).inflate(R.layout.grid_view, null, false)
+        val view1 = LayoutInflater.from(this.context).inflate(R.layout.main_type_grid, null, false)
         val grid1 = view1?.findViewById<GridView>(R.id.id_grid_item)
         grid1?.adapter = GridAdapter(this.context, page1)
 
-        val view2 = LayoutInflater.from(this.context).inflate(R.layout.grid_view, null, false)
+        val view2 = LayoutInflater.from(this.context).inflate(R.layout.main_type_grid, null, false)
         val grid2 = view2?.findViewById<GridView>(R.id.id_grid_item)
         grid2?.adapter = GridAdapter(this.context, page2)
 
@@ -78,25 +86,26 @@ class MainFragment : Fragment() {
         list.add(view2)
 
         id_vp_item.adapter = ItemAdapter(this.context, list)
+        id_vp_item.addOnPageChangeListener(IndicatorChangeListener(id_type_indicator))
     }
 
-    private fun initFilmRecv() {
+    override fun initFilm(films: ArrayList<Film>) {
         id_recv_film.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
 //        id_recv_film.addItemDecoration(DividerItemDecoration(this.context, LinearLayoutManager.HORIZONTAL))
-        val datas = ArrayList<FilmItem>()
-        val film1 = FilmItem("", "战狼2", "25.0")
-        val film2 = FilmItem("", "战狼", "20.0")
-        val film3 = FilmItem("", "建军大业", "35.0")
-        val film4 = FilmItem("", "三生三世十里桃花", "25.0")
-        val film5 = FilmItem("", "鬼吹灯", "35.0")
-        datas.add(film1)
-        datas.add(film2)
-        datas.add(film3)
-        datas.add(film4)
-        datas.add(film5)
-        id_recv_film.adapter = FilmAdapter(this.context, datas, object : BaseSupportAdapter.OnItemClickListener<FilmItem> {
-            override fun onClick(data: FilmItem, position: Int) {
-                Toast.makeText(this@MainFragment.context, data.name, Toast.LENGTH_SHORT).show()
+
+        id_recv_film.adapter = FilmAdapter(this.context, films, object : BaseSupportAdapter.OnItemClickListener<Film> {
+            override fun onClick(data: Film, position: Int) {
+                Toast.makeText(this@MainFragment.context, data.filmName, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    override fun initYouLike(youlikes: ArrayList<GuessYouLike>) {
+        id_recv_you_like.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
+        id_recv_you_like.isNestedScrollingEnabled = false
+        id_recv_you_like.adapter = YourLikeAdapter(this.context, youlikes, object : BaseSupportAdapter.OnItemClickListener<GuessYouLike> {
+            override fun onClick(data: GuessYouLike, position: Int) {
+                Toast.makeText(this@MainFragment.context, data.product, Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -112,7 +121,7 @@ class MainFragment : Fragment() {
         mCallback.removeCallbacks(mAutoScroll)
     }
 
-    val mAutoScroll = AutoScroll()
+    private val mAutoScroll = AutoScroll()
 
     inner class AutoScroll : Runnable {
         override fun run() {
@@ -128,6 +137,17 @@ interface CheckoutToolbar {
 
 fun Fragment.checkout(callback: CheckoutToolbar) {
     callback.toTarget(this)
+}
+
+class IndicatorChangeListener(private val indicator: Indicator) : ViewPager.OnPageChangeListener {
+    override fun onPageScrollStateChanged(state: Int) {}
+
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        indicator.setOffset(position, positionOffset)
+    }
+
+    override fun onPageSelected(position: Int) {}
+
 }
 
 

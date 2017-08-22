@@ -3,31 +3,29 @@ package cn.zhaoshuhao.kotlinfirst.ui.activity
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.app.AppCompatActivity
 import cn.zhaoshuhao.kotlinfirst.R
+import cn.zhaoshuhao.kotlinfirst.base.BaseActivity
+import cn.zhaoshuhao.kotlinfirst.base.startActivity
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
 
-    val mHandler: Handler = Handler()
-    var mIsFirst = true
+    private val mHandler: Handler = Handler()
+    private var mIsFirst = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_splash)
 
         mHandler.postDelayed({
             val sp = getSharedPreferences("config", Context.MODE_PRIVATE)
             mIsFirst = sp.getBoolean("mIsFirst", true)
             if (mIsFirst) {
                 sp.edit().putBoolean("mIsFirst", false).commit()
-//                startActivity(GuideActivity::class.java)
                 startActivity<GuideActivity>()
-            } else {
-                startActivity(MainActivity::class.java)
-            }
+            } else startActivity<MainActivity>()
+            finish()
         }, 3000)
     }
 
+    override fun obtainLayoutID(): Int = R.layout.activity_splash
 }
 
