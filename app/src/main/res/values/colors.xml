@@ -6,4 +6,5 @@
 
     <color name="tabTextNormal">#9e9e9e</color>
     <color name="tabTextSelected">@color/colorPrimary</color>
+    <color name="progress_load">#4059ff</color>
 </resources>

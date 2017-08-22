@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="80dp"
+              android:layout_height="100dp"
+              android:layout_marginBottom="0dp"
+              android:layout_marginLeft="3dp"
+              android:layout_marginRight="3dp"
+              android:layout_marginTop="0dp"
+              android:clickable="true"
+              android:focusable="true"
+              android:foreground="?android:attr/selectableItemBackground"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/id_iv_film_thumb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:scaleType="centerInside"/>
+
+    <TextView
+        android:id="@+id/id_tv_film_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:lines="1"
+        android:text="战狼2"
+        android:textSize="15dp"/>
+
+    <TextView
+        android:id="@+id/id_tv_film_cost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5.00"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="10dp"/>
+
+</LinearLayout>

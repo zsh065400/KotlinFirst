@@ -1,5 +1,6 @@
 package cn.zhaoshuhao.kotlinfirst.utils
 
+import android.content.Context
 import android.util.Log
 
 /**
@@ -18,3 +19,7 @@ fun log(type: LogType, tag: String, msg: String) =
             LogType.WARNING -> Log.w(tag, msg)
             LogType.INFO -> Log.i(tag, msg)
         }
+
+fun Context.requestPermission(){
+
+}

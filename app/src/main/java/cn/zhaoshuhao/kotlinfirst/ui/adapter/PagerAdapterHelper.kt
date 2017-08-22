@@ -1,12 +1,21 @@
 package cn.zhaoshuhao.kotlinfirst.adapter
 
 import android.content.Context
+import android.os.Bundle
 import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import cn.zhaoshuhao.kotlinfirst.R
+import cn.zhaoshuhao.kotlinfirst.base.startActivity
+import cn.zhaoshuhao.kotlinfirst.model.bean.WebViewInfo
+import cn.zhaoshuhao.kotlinfirst.model.network.entity.Banner
+import cn.zhaoshuhao.kotlinfirst.ui.activity.MainActivity
+import cn.zhaoshuhao.kotlinfirst.ui.activity.WebViewActivity
+import cn.zhaoshuhao.kotlinfirst.utils.obtainDefault
+import com.bumptech.glide.Glide
+
 
 /**
  * Created by Scout
@@ -36,19 +45,26 @@ class GuideAdapter(context: Context, val datas: IntArray) : BasePagerAdapter(con
             mViews.add(inflate)
         }
     }
-
-    override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
-        container?.removeView(mViews[position])
-    }
+//
+//    override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
+//        container?.removeView(mViews[position])
+//    }
 }
 
-class BannerAdapter(context: Context, datas: IntArray) : BasePagerAdapter(context) {
+class BannerAdapter(context: Context, datas: ArrayList<Banner>) : BasePagerAdapter(context) {
 
     init {
-        datas.forEach {
+        datas.forEach { banner: Banner ->
             val inflate = LayoutInflater.from(context).inflate(R.layout.guide_imageview, null, false)
             val imageView = inflate.findViewById<ImageView>(R.id.id_iv_guide)
-            imageView?.setImageResource(it)
+//            imageView?.setImageResource(it)
+            with(Glide.with(context)) { load(banner.image_url).apply(obtainDefault()).into(imageView) }
+            inflate.setOnClickListener {
+                val info = WebViewInfo(banner.title, banner.to_url)
+                val bundle = Bundle()
+                bundle.putParcelable("webinfo", info)
+                (context as MainActivity).startActivity<WebViewActivity>(bundle)
+            }
             mViews.add(inflate)
         }
     }
