@@ -24,7 +24,7 @@
             android:id="@+id/id_ylike_product"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
+            android:ellipsize="marquee"
             android:lines="1"
             android:text="威威海鲜"
             android:textColor="@color/colorPrimary"

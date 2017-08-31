@@ -12,7 +12,7 @@ import com.bumptech.glide.request.RequestOptions
  */
 fun RequestManager.obtainDefault(): RequestOptions = RequestOptions()
 //        .fitCenter()
-        .placeholder(R.mipmap.ic_launcher)
+//        .placeholder(R.mipmap.ic_launcher)
         .error(R.mipmap.ic_launcher)
         .priority(Priority.NORMAL)
         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)

@@ -18,6 +18,7 @@
         </activity>
         <activity
             android:name=".ui.activity.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -25,11 +26,23 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.GuideActivity">
+        <activity
+            android:name=".ui.activity.GuideActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".ui.activity.WebViewActivity">
+        <activity
+            android:name=".ui.activity.WebViewActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".ui.activity.ProductDetailActivity">
+        <activity
+            android:name=".ui.activity.ProductDetailActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".ui.activity.ImageGalleryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent"
+            >
         </activity>
     </application>
 

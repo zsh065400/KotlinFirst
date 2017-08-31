@@ -7,6 +7,7 @@ package cn.zhaoshuhao.kotlinfirst.model.network.common
 interface LoadListener<in T> {
     fun onSuccess(data: T?)
     fun onFailed(t: Throwable?) = t?.printStackTrace()
+    fun onLoadLocalData()
 }
 
 

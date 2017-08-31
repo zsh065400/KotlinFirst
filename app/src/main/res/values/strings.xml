@@ -2,4 +2,7 @@
     <string name="app_name">KotlinFirst</string>
     <string name="drawer_open">open drawer</string>
     <string name="drawer_close">close drawer</string>
+
+
+    <string name="footer_scroll_behavior">cn.zhaoshuhao.kotlinfirst.widget.FooterBehavior</string>
 </resources>

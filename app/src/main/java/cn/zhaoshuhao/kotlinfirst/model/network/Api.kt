@@ -37,6 +37,7 @@ interface NetTask<out T> {
 class Forward<T>(private val loadListener: LoadListener<T>) : Callback<T> {
     override fun onFailure(call: Call<T>?, t: Throwable?) {
         loadListener.onFailed(t)
+        loadListener.onLoadLocalData()
     }
 
     override fun onResponse(call: Call<T>?, response: Response<T>?) {

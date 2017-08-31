@@ -12,11 +12,13 @@ import android.widget.Toast
 import cn.zhaoshuhao.kotlinfirst.R
 import cn.zhaoshuhao.kotlinfirst.adapter.*
 import cn.zhaoshuhao.kotlinfirst.base.BaseFragment
+import cn.zhaoshuhao.kotlinfirst.base.startActivity
 import cn.zhaoshuhao.kotlinfirst.contract.Main
 import cn.zhaoshuhao.kotlinfirst.model.bean.TypeInfo
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Banner
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Film
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.GuessYouLike
+import cn.zhaoshuhao.kotlinfirst.ui.activity.ProductDetailActivity
 import cn.zhaoshuhao.kotlinfirst.ui.view.Indicator
 import kotlinx.android.synthetic.main.fragment_main.*
 
@@ -35,7 +37,7 @@ class MainFragment : BaseFragment(), Main.View {
     override fun obtainLayoutID(): Int = R.layout.fragment_main
 
     override fun initView(view: View?, savedBundle: Bundle?) {
-        mainPresent.start()
+        mainPresent.onStart()
         initItemGrid()
     }
 
@@ -105,9 +107,23 @@ class MainFragment : BaseFragment(), Main.View {
         id_recv_you_like.isNestedScrollingEnabled = false
         id_recv_you_like.adapter = YourLikeAdapter(this.context, youlikes, object : BaseSupportAdapter.OnItemClickListener<GuessYouLike> {
             override fun onClick(data: GuessYouLike, position: Int) {
-                Toast.makeText(this@MainFragment.context, data.product, Toast.LENGTH_SHORT).show()
+                val bundle = Bundle()
+                bundle.putSerializable("product", data)
+                activity.startActivity<ProductDetailActivity>(bundle)
             }
         })
+    }
+
+    /*加载失败*/
+    override fun loadError(code: Int) {
+        when (code) {
+            1 -> {
+            }
+            2 -> {
+            }
+            3 -> {
+            }
+        }
     }
 
     override fun onResume() {

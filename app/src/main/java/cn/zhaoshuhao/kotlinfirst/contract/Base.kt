@@ -7,6 +7,14 @@ package cn.zhaoshuhao.kotlinfirst.contract
 interface Base {
     interface Present<out T : Base.View<Present<T>>> {
         fun setView(view: @UnsafeVariance T)
+
+        fun onStart() {}
+
+        fun onPause() {}
+
+        fun onStop() {}
+
+        fun onDestroy() {}
     }
 
     interface View<out T : Present<View<T>>> {

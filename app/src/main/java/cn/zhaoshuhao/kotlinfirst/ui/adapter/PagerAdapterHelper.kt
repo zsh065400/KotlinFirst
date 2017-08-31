@@ -13,6 +13,7 @@ import cn.zhaoshuhao.kotlinfirst.model.bean.WebViewInfo
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Banner
 import cn.zhaoshuhao.kotlinfirst.ui.activity.MainActivity
 import cn.zhaoshuhao.kotlinfirst.ui.activity.WebViewActivity
+import cn.zhaoshuhao.kotlinfirst.utils.load
 import cn.zhaoshuhao.kotlinfirst.utils.obtainDefault
 import com.bumptech.glide.Glide
 
@@ -21,6 +22,22 @@ import com.bumptech.glide.Glide
  * Created by Scout
  * Created on 2017/7/19 18:31.
  */
+
+class GalleryAdapter(context: Context, private val datas: List<String>) : BasePagerAdapter(context) {
+
+    init {
+        datas.forEach {
+            val inflate = LayoutInflater.from(context).inflate(R.layout.gallery_imageview, null, false)
+            val imageView = inflate.findViewById<ImageView>(R.id.id_iv_gallery)
+            imageView.load(context, it)
+            mViews.add(inflate)
+        }
+    }
+
+    override fun getCount(): Int {
+        return datas.size
+    }
+}
 
 class ItemAdapter(context: Context, val grids: List<View>) : BasePagerAdapter(context) {
     init {
