@@ -8,15 +8,19 @@ import cn.zhaoshuhao.kotlinfirst.model.network.entity.ProductDetail
 import cn.zhaoshuhao.kotlinfirst.utils.KCache
 import cn.zhaoshuhao.kotlinfirst.utils.anyToJson
 import cn.zhaoshuhao.kotlinfirst.utils.jsonToAny
+import cn.zhaoshuhao.kotlinfirst.utils.obtainNetStatus
 
 /**
  * Created by Scout
  * Created on 2017/8/25 17:22.
  */
 class DetailPresent(private val context: Context) : Detail.Present {
-
     private lateinit var view: Detail.View
+
     private var goodsId: Int = 0
+    private val netWorkAvailable: Boolean by lazy {
+        context.obtainNetStatus()
+    }
 
     override fun setView(view: Detail.View) {
         this.view = view
@@ -27,11 +31,11 @@ class DetailPresent(private val context: Context) : Detail.Present {
     }
 
     override fun onStart() {
-        this.goodsId = goodsId
-        loadDetailInfo(goodsId)
+        if (!netWorkAvailable) loadLocalData()
+        else loadDetailInfo()
     }
 
-    override fun loadDetailInfo(goodsId: Int) {
+    override fun loadDetailInfo() {
         GetProductDetail.getInstance(goodsId).execute(object : LoadListener<ProductDetail> {
             override fun onSuccess(data: ProductDetail?) {
                 if (data != null) {
@@ -42,20 +46,25 @@ class DetailPresent(private val context: Context) : Detail.Present {
             }
 
             override fun onLoadLocalData() {
-                val detailJson: String = KCache<String>(context, goodsId.toString()).getValue("")
-                if (!TextUtils.isEmpty(detailJson)) {
-                    val productDetail = jsonToAny<ProductDetail>(detailJson)
-                    view.showDeatilInfo(productDetail)
-                }
+                loadLocalData()
             }
         })
+    }
+
+    override fun loadLocalData() {
+        val detailJson: String = KCache<String>(context, goodsId.toString()).getValue("")
+        if (!TextUtils.isEmpty(detailJson)) {
+            val productDetail = jsonToAny<ProductDetail>(detailJson)
+            view.showDeatilInfo(productDetail)
+        }
     }
 }
 
 interface Detail {
     interface Present : Base.Present<Detail.View> {
         fun addParams(goodsId: Int)
-        fun loadDetailInfo(goodsId: Int)
+        fun loadDetailInfo()
+        fun loadLocalData()
     }
 
     interface View : Base.View<Detail.Present> {

@@ -1,7 +1,7 @@
 package cn.zhaoshuhao.kotlinfirst.model.network.common
 
 import cn.zhaoshuhao.kotlinfirst.model.network.FILM
-import cn.zhaoshuhao.kotlinfirst.model.network.Forward
+import cn.zhaoshuhao.kotlinfirst.model.network.DefaultLoadListener
 import cn.zhaoshuhao.kotlinfirst.model.network.MY_API
 import cn.zhaoshuhao.kotlinfirst.model.network.NetTask
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Film
@@ -17,7 +17,7 @@ object GetFilmData : NetTask<ArrayList<Film>> {
         val retrofit = obtainClient(MY_API)
         val bannerService = retrofit.create(FilmService::class.java)
         val call = bannerService.getFilm()
-        call.enqueue(Forward<ArrayList<Film>>(loadListener))
+        call.enqueue(DefaultLoadListener<ArrayList<Film>>(loadListener))
     }
 }
 

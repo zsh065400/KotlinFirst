@@ -15,7 +15,7 @@ class ImageGalleryActivity : BaseActivity() {
     private lateinit var product: ProductDetail.Result
     private  var size: Int = 0
 
-    override fun beforeSetContentView() {
+    override fun prepareInitUI() {
         fullScreen()
         product = intent.extras.getSerializable("images") as ProductDetail.Result
         size = product.detail_imags.size

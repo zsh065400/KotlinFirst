@@ -22,7 +22,7 @@ class GuideActivity : BaseActivity() {
     }
 
 
-    override fun beforeSetContentView() {
+    override fun prepareInitUI() {
         /*设置全屏*/
         fullScreen()
     }

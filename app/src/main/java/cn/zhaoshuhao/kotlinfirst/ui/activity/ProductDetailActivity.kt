@@ -31,7 +31,7 @@ class ProductDetailActivity : BaseActivity(), Detail.View {
         present.onStart()
     }
 
-    override fun beforeSetContentView() {
+    override fun prepareInitUI() {
         transparentStatusBar()
         bindMvp()
         product = intent.extras.getSerializable("product") as GuessYouLike

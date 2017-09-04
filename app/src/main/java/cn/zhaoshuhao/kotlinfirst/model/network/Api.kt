@@ -34,7 +34,7 @@ interface NetTask<out T> {
     fun obtainClient(baseUrl: String): Retrofit = Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create()).build()
 }
 
-class Forward<T>(private val loadListener: LoadListener<T>) : Callback<T> {
+class DefaultLoadListener<T>(private val loadListener: LoadListener<T>) : Callback<T> {
     override fun onFailure(call: Call<T>?, t: Throwable?) {
         loadListener.onFailed(t)
         loadListener.onLoadLocalData()

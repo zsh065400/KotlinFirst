@@ -12,22 +12,30 @@ import cn.zhaoshuhao.kotlinfirst.model.network.entity.GuessYouLike
 import cn.zhaoshuhao.kotlinfirst.utils.SPExt
 import cn.zhaoshuhao.kotlinfirst.utils.jsonToList
 import cn.zhaoshuhao.kotlinfirst.utils.listToJson
+import cn.zhaoshuhao.kotlinfirst.utils.obtainNetStatus
 
 /**
  * Created by Scout
  * Created on 2017/8/14 21:00.
  */
-class MainPresent(val context: Context) : Main.Present {
+class MainPresent(private val context: Context) : Main.Present {
     lateinit var mainView: Main.View
 
-    var bannerJson: String by SPExt.SpDelegate(context, "banners", "")
-    var filmJson: String by SPExt.SpDelegate(context, "films", "")
-    var youLikeJson: String by SPExt.SpDelegate(context, "youlikes", "")
+    private var bannerJson: String by SPExt.SpDelegate(context, "banners", "")
+    private var filmJson: String by SPExt.SpDelegate(context, "films", "")
+    private var youLikeJson: String by SPExt.SpDelegate(context, "youlikes", "")
+    private val netWorkAvailable: Boolean by lazy {
+        context.obtainNetStatus()
+    }
 
     override fun onStart() {
-        loadBanner()
-        loadFilm()
-        loadYouLike()
+        if (!netWorkAvailable) {
+            for (i in 0..2) loadLocalData(i)
+        } else {
+            loadBanner()
+            loadFilm()
+            loadYouLike()
+        }
     }
 
     override fun setView(view: Main.View) {
@@ -46,10 +54,7 @@ class MainPresent(val context: Context) : Main.Present {
             }
 
             override fun onLoadLocalData() {
-                if (!TextUtils.isEmpty(bannerJson)) {
-                    val banners: ArrayList<Banner> = jsonToList<Banner>(bannerJson)
-                    mainView.initBanner(banners)
-                }
+                loadLocalData(0)
             }
         })
     }
@@ -66,10 +71,7 @@ class MainPresent(val context: Context) : Main.Present {
             }
 
             override fun onLoadLocalData() {
-                if (!TextUtils.isEmpty(filmJson)) {
-                    val films = jsonToList<Film>(filmJson)
-                    mainView.initFilm(films)
-                }
+                loadLocalData(1)
             }
         })
     }
@@ -86,12 +88,36 @@ class MainPresent(val context: Context) : Main.Present {
             }
 
             override fun onLoadLocalData() {
+                loadLocalData(2)
+            }
+        })
+    }
+
+    /**
+     * 加载本地数据，若存在
+     *0 -> 本地Banner数据， 1 -> 本地Film数据， 2 -> 本地YouLike数据
+     * */
+    override fun loadLocalData(code: Int) {
+        when (code) {
+            0 -> {
+                if (!TextUtils.isEmpty(bannerJson)) {
+                    val banners: ArrayList<Banner> = jsonToList<Banner>(bannerJson)
+                    mainView.initBanner(banners)
+                }
+            }
+            1 -> {
+                if (!TextUtils.isEmpty(filmJson)) {
+                    val films = jsonToList<Film>(filmJson)
+                    mainView.initFilm(films)
+                }
+            }
+            2 -> {
                 if (!TextUtils.isEmpty(youLikeJson)) {
                     val youlikes = jsonToList<GuessYouLike>(youLikeJson)
                     mainView.initYouLike(youlikes)
                 }
             }
-        })
+        }
     }
 
 }
@@ -103,6 +129,8 @@ interface Main {
         fun loadFilm()
 
         fun loadYouLike()
+
+        fun loadLocalData(code: Int)
     }
 
     interface View : Base.View<Main.Present> {

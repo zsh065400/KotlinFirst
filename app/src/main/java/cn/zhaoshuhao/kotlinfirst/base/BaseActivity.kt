@@ -29,13 +29,16 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        beforeSetContentView()
+        prepareInitUI()
         setContentView(obtainLayoutID())
+        beforeInitViews()
         initViews()
         initToolbar()
     }
 
-    open fun beforeSetContentView() {}
+    open fun beforeInitViews() {}
+
+    open fun prepareInitUI() {}
 
     abstract fun obtainLayoutID(): Int
 
@@ -56,14 +59,9 @@ abstract class BaseActivity : AppCompatActivity() {
 
     open fun initMenuAction(menu: Menu?) {}
 
-    open fun onPrepareRequestPermission() {}
-
-    open fun onRequestPermission(requestCode: Int, vararg permissions: String) {
-        ActivityCompat.requestPermissions(this, permissions, requestCode)
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        KPermission.handleResult(this, requestCode, permissions, grantResults)
+//        KPermission.handleResult(this, requestCode, permissions, grantResults)
+        KPermission.handleResultOfLambda(this, requestCode, permissions, grantResults)
     }
 }
 

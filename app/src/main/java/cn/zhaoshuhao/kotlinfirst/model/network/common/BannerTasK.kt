@@ -1,7 +1,7 @@
 package cn.zhaoshuhao.kotlinfirst.model.network.common
 
 import cn.zhaoshuhao.kotlinfirst.model.network.BANNER
-import cn.zhaoshuhao.kotlinfirst.model.network.Forward
+import cn.zhaoshuhao.kotlinfirst.model.network.DefaultLoadListener
 import cn.zhaoshuhao.kotlinfirst.model.network.MY_API
 import cn.zhaoshuhao.kotlinfirst.model.network.NetTask
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Banner
@@ -17,7 +17,7 @@ object GetBannerData : NetTask<ArrayList<Banner>> {
         val retrofit = obtainClient(MY_API)
         val bannerService = retrofit.create(BannerService::class.java)
         val call = bannerService.getBanner()
-        call.enqueue(Forward<ArrayList<Banner>>(loadListener))
+        call.enqueue(DefaultLoadListener<ArrayList<Banner>>(loadListener))
     }
 }
 

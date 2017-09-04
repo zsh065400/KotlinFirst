@@ -1,7 +1,7 @@
 package cn.zhaoshuhao.kotlinfirst.model.network.common
 
 import cn.zhaoshuhao.kotlinfirst.model.network.BASE_API
-import cn.zhaoshuhao.kotlinfirst.model.network.Forward
+import cn.zhaoshuhao.kotlinfirst.model.network.DefaultLoadListener
 import cn.zhaoshuhao.kotlinfirst.model.network.NetTask
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.ProductDetail
 import retrofit2.Call
@@ -22,7 +22,7 @@ class GetProductDetail(private val goodsId: Int) : NetTask<ProductDetail> {
     override fun execute(loadListener: LoadListener<ProductDetail>) {
         val service = obtainClient(BASE_API).create(ProductDetailService::class.java)
         val productDetail = service.getProductDetail(goodsId)
-        productDetail.enqueue(Forward<ProductDetail>(loadListener))
+        productDetail.enqueue(DefaultLoadListener<ProductDetail>(loadListener))
     }
 }
 

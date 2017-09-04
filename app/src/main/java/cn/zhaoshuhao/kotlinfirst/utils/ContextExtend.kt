@@ -1,7 +1,9 @@
 package cn.zhaoshuhao.kotlinfirst.utils
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Color
+import android.net.ConnectivityManager
 import android.util.Log
 import android.view.WindowManager
 
@@ -60,6 +62,11 @@ enum class PermissionType(val code: Int) {
     READ_EXTERNAL_STORAGE(0X134), WRITE_EXTERNAL_STORAGE(0X135)
 }
 
-fun async(block: () -> Unit){
+fun async(block: () -> Unit) {
     Thread(block).start()
+}
+
+fun Context.obtainNetStatus(): Boolean {
+    val connService: ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    return connService?.activeNetworkInfo == null || connService?.activeNetworkInfo.isAvailable
 }

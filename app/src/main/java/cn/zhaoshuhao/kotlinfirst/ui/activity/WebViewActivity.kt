@@ -2,9 +2,11 @@ package cn.zhaoshuhao.kotlinfirst.ui.activity
 
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.view.View
 import cn.zhaoshuhao.kotlinfirst.R
 import cn.zhaoshuhao.kotlinfirst.base.BaseActivity
 import cn.zhaoshuhao.kotlinfirst.model.bean.WebViewInfo
+import cn.zhaoshuhao.kotlinfirst.utils.defaultToolbarOptions
 import cn.zhaoshuhao.kotlinfirst.utils.show
 import kotlinx.android.synthetic.main.webview.*
 
@@ -18,7 +20,7 @@ class WebViewActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun beforeSetContentView() {
+    override fun prepareInitUI() {
         val bundle = intent.extras
         mInfo = bundle.getParcelable<WebViewInfo>("webinfo")
     }
@@ -28,12 +30,6 @@ class WebViewActivity : BaseActivity() {
         id_web_detail.show(mInfo, id_progress_load)
     }
 
-    override fun initToolbar(): Unit = with(id_toolbar as Toolbar) {
-        title = mInfo.title/*在设置supportActionBar之前设置标题*/
-        setSupportActionBar(this)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        setNavigationOnClickListener { finish() }
-    }
+    override fun initToolbar(): Unit = defaultToolbarOptions(id_toolbar as Toolbar, mInfo.title, View.OnClickListener { finish() })
 
 }

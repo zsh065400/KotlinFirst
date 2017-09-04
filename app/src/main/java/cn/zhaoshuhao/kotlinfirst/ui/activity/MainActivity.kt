@@ -14,10 +14,10 @@ import android.view.Gravity
 import android.view.Menu
 import cn.zhaoshuhao.kotlinfirst.R
 import cn.zhaoshuhao.kotlinfirst.base.BaseActivity
+import cn.zhaoshuhao.kotlinfirst.base.startActivity
 import cn.zhaoshuhao.kotlinfirst.base.toast
 import cn.zhaoshuhao.kotlinfirst.contract.MainPresent
 import cn.zhaoshuhao.kotlinfirst.fragment.*
-import cn.zhaoshuhao.kotlinfirst.utils.IPermissionResult
 import cn.zhaoshuhao.kotlinfirst.utils.KPermission
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
@@ -42,26 +42,10 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        KPermission.request(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        KPermission.requestOfLambda(Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                activity = this,
-                requestCode = 0x111,
-                handle = object : IPermissionResult {
-                    override fun onGranted(permission: ArrayList<String>) {
-                        //授权的权限会回调该方法
-                    }
-
-                    override fun onDenied(permission: ArrayList<String>) {
-                        //被拒绝的权限列表（未勾选不再显示）
-                    }
-
-                    override fun onNeverShow(permission: ArrayList<String>) {
-                        //被勾选不再显示的权限
-                    }
-                })
-
-        KPermission.requestOfLambda(Manifest.permission.WRITE_EXTERNAL_STORAGE,activity = this){
-            g, d, n ->
+                activity = this) { g, d, n ->
+            /*针对权限做不同处理*/
         }
         initFragmentUI();
     }
@@ -86,7 +70,16 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
                     false
                 }
                 R.id.id_main_scan -> {
-                    toast("扫描")
+                    KPermission.requestOfLambda(Manifest.permission.CAMERA, activity = this@MainActivity) { g, d, n ->
+                        when {
+                            g.size != 0 -> {
+                                startActivity<ScanActivity>()
+                                logd("授权成功")
+                            }
+                            d.size != 0 -> showTipDialog()
+                            n.size != 0 -> gotoSettings()
+                        }
+                    }
                     true
                 }
                 else -> false
@@ -109,7 +102,6 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
             true
         }
     }
-
 
     var mCurIndex = 0
 
@@ -139,6 +131,22 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
         mCurIndex = 0
         supportFragmentManager.beginTransaction()
                 .replace(R.id.id_main_fragment_content, mTabTarget[0]).commit()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        when (mCurrentPage) {
+            0 -> {
+                menu?.findItem(R.id.id_main_search)?.isVisible = true
+                menu?.findItem(R.id.id_main_scan)?.isVisible = true
+                menu?.findItem(R.id.id_main_location)?.isVisible = true
+            }
+            else -> {
+                menu?.findItem(R.id.id_main_search)?.isVisible = false
+                menu?.findItem(R.id.id_main_scan)?.isVisible = false
+                menu?.findItem(R.id.id_main_location)?.isVisible = false
+            }
+        }
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun obtainMenuRes(): Int {
@@ -174,13 +182,32 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
         super.onBackPressed()
     }
 
+    private var mCurrentPage: Int = 0
+
     override fun toTarget(fragment: Fragment) {
         when (fragment) {
-            is MainFragment -> title = mTabText[0]
-            is ARoundFragment -> title = mTabText[1]
-            is MineFragment -> title = mTabText[2]
-            is MoreFragment -> title = mTabText[3]
+            is MainFragment -> mCurrentPage = 0
+            is ARoundFragment -> mCurrentPage = 1
+            is MineFragment -> mCurrentPage = 2
+            is MoreFragment -> mCurrentPage = 3
+
         }
+        title = mTabText[mCurrentPage]
+        invalidateOptionsMenu()
+    }
+
+    /**
+     * 引导用户到设置界面打开相机权限
+     * */
+    private fun gotoSettings() {
+
+    }
+
+    /**
+     * 提示并引导用户相机权限的重要性
+     * */
+    private fun showTipDialog() {
+
     }
 }
 
