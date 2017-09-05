@@ -30,7 +30,7 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
     private val mTabIcon = arrayOf(R.drawable.ic_tab_artists, R.drawable.ic_tab_albums,
             R.drawable.ic_tab_cart, R.drawable.ic_tab_songs)
 
-    val mTabTarget by lazy {
+    private val mTabTarget by lazy {
         val mainFragment = MainFragment()
         val mainPresent = MainPresent(this)
         mainFragment.setPresent(mainPresent)
@@ -47,8 +47,15 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
                 activity = this) { g, d, n ->
             /*针对权限做不同处理*/
         }
+        mTabTarget
         initFragmentUI();
     }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        /*做数据保存并在onCreate、onResotreInstanceState中恢复*/
+        /*修复Fragment切换被replace回收的bug*/
+    }
+
 
     override fun obtainLayoutID(): Int = R.layout.activity_main
 
