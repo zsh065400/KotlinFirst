@@ -1,6 +1,6 @@
 package cn.zhaoshuhao.kotlinfirst.model.network.common
 
-import cn.zhaoshuhao.kotlinfirst.model.network.Forward
+import cn.zhaoshuhao.kotlinfirst.model.network.DefaultLoadListener
 import cn.zhaoshuhao.kotlinfirst.model.network.MY_API
 import cn.zhaoshuhao.kotlinfirst.model.network.NetTask
 import cn.zhaoshuhao.kotlinfirst.model.network.YOU_LIKE
@@ -17,7 +17,7 @@ object GetYourLike : NetTask<ArrayList<GuessYouLike>> {
     override fun execute(loadListener: LoadListener<ArrayList<GuessYouLike>>) {
         val youLikeService = obtainClient(MY_API).create(YouLikeService::class.java)
         val yourLikes = youLikeService.getYourLike()
-        yourLikes.enqueue(Forward<ArrayList<GuessYouLike>>(loadListener))
+        yourLikes.enqueue(DefaultLoadListener<ArrayList<GuessYouLike>>(loadListener))
     }
 
 }

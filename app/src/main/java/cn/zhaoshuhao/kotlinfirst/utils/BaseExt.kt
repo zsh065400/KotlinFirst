@@ -20,3 +20,7 @@ fun <P1, P2, P3, R> Function3<P1, P2, P3, R>.compose(p1: P1) = fun(p2: P2) = fun
 infix fun <P1, P2, R> Function1<P1, P2>.andThen(function: Function1<P2, R>) = fun(p1: P1) {
     function.invoke(this(p1))
 }
+
+//inline fun <T, R> Any?.withNonNull(receiver: T, block: T.() -> R): R? {
+//    return receiver?.block()
+//}

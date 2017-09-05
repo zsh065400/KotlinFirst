@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
 import android.view.Menu
@@ -11,9 +13,11 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import cn.zhaoshuhao.kotlinfirst.R
+import cn.zhaoshuhao.kotlinfirst.utils.KPermission
 import cn.zhaoshuhao.kotlinfirst.utils.LogType
 import cn.zhaoshuhao.kotlinfirst.utils.componet
 import cn.zhaoshuhao.kotlinfirst.utils.log
+
 
 /**
  * Created by Scout
@@ -25,18 +29,20 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        beforeSetContentView()
+        prepareInitUI()
         setContentView(obtainLayoutID())
+        beforeInitViews()
         initViews()
+        initToolbar()
     }
 
-    open fun beforeSetContentView() {}
+    open fun beforeInitViews() {}
+
+    open fun prepareInitUI() {}
 
     abstract fun obtainLayoutID(): Int
 
-    open fun initViews() {
-        initToolbar()
-    }
+    open fun initViews() {}
 
     open fun initToolbar() {}
 
@@ -51,10 +57,12 @@ abstract class BaseActivity : AppCompatActivity() {
         return 0
     }
 
-    open fun initMenuAction(menu: Menu?) {
+    open fun initMenuAction(menu: Menu?) {}
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+//        KPermission.handleResult(this, requestCode, permissions, grantResults)
+        KPermission.handleResultOfLambda(this, requestCode, permissions, grantResults)
     }
-
 }
 
 inline fun Context.toast(resId: Int, longTime: Boolean = false) = Toast.makeText(this, resId, if (longTime) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
@@ -77,9 +85,12 @@ inline fun Activity.fullScreen() {
 inline fun <T> Activity.startActivity(other: Class<T>, bundle: Bundle) {
     val target = Intent(this, other)
     target.putExtras(bundle)
-    startActivity(target)
+//    startActivity(target)
     //设置进入和退出动画
-    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+//    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+    val options = ActivityOptionsCompat.makeCustomAnimation(this,
+            R.anim.fade_in, R.anim.fade_out)
+    ActivityCompat.startActivity(this, target, options.toBundle())
 }
 
 inline fun <reified T : Context> Activity.startActivity() {

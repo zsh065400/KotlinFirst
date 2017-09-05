@@ -12,6 +12,7 @@ import cn.zhaoshuhao.kotlinfirst.R
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Film
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.GuessYouLike
 import cn.zhaoshuhao.kotlinfirst.utils.findViewOften
+import cn.zhaoshuhao.kotlinfirst.utils.load
 import cn.zhaoshuhao.kotlinfirst.utils.obtainDefault
 import com.bumptech.glide.Glide
 
@@ -23,6 +24,7 @@ class YourLikeAdapter(context: Context, datas: ArrayList<GuessYouLike>, listener
     override fun onCreateViewWithId(): Int = R.layout.main_you_like_item
 
     override fun onBindViewHolder(holder: SupportViewHolder?, position: Int) {
+        if (holder == null) return
         with(holder!!) {
             val youLike = datas[position]
             val imageView = findView<ImageView>(R.id.id_ylike_image)
@@ -31,11 +33,9 @@ class YourLikeAdapter(context: Context, datas: ArrayList<GuessYouLike>, listener
             val price = findView<TextView>(R.id.id_ylike_price)
             val value = findView<TextView>(R.id.id_ylike_value)
             val bought = findView<TextView>(R.id.id_ylike_bought)
-            with(Glide.with(context)) {
-                val images = youLike.images
-                val imageUrl = images[2].image
-                load(imageUrl).apply(obtainDefault()).into(imageView)
-            }
+            val imageUrl = youLike.images[2].image
+            imageView.load(context, imageUrl)
+
             product.text = youLike.product
             title.text = youLike.title
             price.text = youLike.price

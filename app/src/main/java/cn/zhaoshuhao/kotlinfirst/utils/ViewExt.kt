@@ -1,9 +1,14 @@
 package cn.zhaoshuhao.kotlinfirst.utils
 
+import android.content.Context
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.SparseArray
 import android.view.View
+import android.widget.ImageView
 import android.widget.ProgressBar
 import cn.zhaoshuhao.kotlinfirst.model.bean.WebViewInfo
+import com.bumptech.glide.Glide
 import com.tencent.smtt.export.external.interfaces.WebResourceError
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.sdk.WebChromeClient
@@ -14,6 +19,21 @@ import com.tencent.smtt.sdk.WebViewClient
  * Created by Scout
  * Created on 2017/7/28 19:53.
  */
+
+fun AppCompatActivity.defaultToolbarOptions(toolbar: Toolbar, title: String, navigation: View.OnClickListener?) {
+    with(toolbar) {
+        this.title = title
+        setSupportActionBar(toolbar)
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setNavigationOnClickListener(navigation)
+    }
+}
+
+fun ImageView.load(context: Context, imageUrl: String) = with(Glide.with(context)) {
+    load(imageUrl).apply(obtainDefault()).into(this@load)
+}
+
 /*
 * 利用接收者是同一对象的原理，扩展获取其保存的值并作单独缓存
 * */

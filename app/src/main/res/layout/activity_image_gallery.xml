@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:context="cn.zhaoshuhao.kotlinfirst.ui.activity.ImageGalleryActivity">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/id_gallery_vp_images"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="220dp">
+
+    </android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="15dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/id_gallery_tv_product"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:lines="1"
+            android:text="威威海鲜大排档"
+            android:textColor="@android:color/white"
+            android:textSize="23dp"/>
+
+        <TextView
+            android:id="@+id/id_gallery_tv_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="12/12"
+            android:textColor="@android:color/white"
+            android:textSize="23dp"/>
+    </LinearLayout>
+
+</RelativeLayout>
