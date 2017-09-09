@@ -46,7 +46,7 @@ class ScanActivity : BaseActivity(), QRCodeView.Delegate {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        KPermission.handleResultOfLambda(this, requestCode, permissions, grantResults)
+        KPermission.handleResultOfLambda(this, requestCode, permissions.asList(), grantResults)
     }
 
     override fun onScanQRCodeSuccess(result: String?) {

@@ -24,4 +24,11 @@
         android:orderInCategory="200"
         android:title="扫描"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/id_main_map"
+        android:icon="@drawable/ic_map_24dp"
+        android:orderInCategory="300"
+        android:title="地图"
+        app:showAsAction="always"/>
 </menu>

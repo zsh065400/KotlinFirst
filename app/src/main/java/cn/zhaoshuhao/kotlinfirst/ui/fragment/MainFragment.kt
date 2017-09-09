@@ -38,7 +38,18 @@ class MainFragment : BaseFragment(), Main.View {
 
     override fun initView(view: View?, savedBundle: Bundle?) {
         mainPresent.onStart()
-        initItemGrid()
+        initRefreshLayout()
+    }
+
+    private fun initRefreshLayout() {
+        id_main_refresh.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
+        id_main_refresh.setOnRefreshListener {
+            mainPresent.onStart()
+        }
+    }
+
+    override fun onRefreshComplete() {
+        id_main_refresh.isRefreshing = false
     }
 
     val mCallback = Handler()
@@ -57,7 +68,7 @@ class MainFragment : BaseFragment(), Main.View {
         })
     }
 
-    private fun initItemGrid() {
+    override fun initItemGrid() {
         val list = mutableListOf<View>()
         val page1 = mutableListOf<TypeInfo>()
         val page2 = mutableListOf<TypeInfo>()

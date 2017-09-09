@@ -16,13 +16,13 @@
             android:id="@+id/id_toolbar"
             layout="@layout/toolbar"/>
 
-        <FrameLayout
-            android:id="@+id/id_main_fragment_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="9">
+            <FrameLayout
+                android:id="@+id/id_main_fragment_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="9">
 
-        </FrameLayout>
+            </FrameLayout>
 
         <com.ashokvarma.bottomnavigation.BottomNavigationBar
             android:id="@+id/id_main_bottom_navigation"
@@ -32,6 +32,7 @@
 
         </com.ashokvarma.bottomnavigation.BottomNavigationBar>
     </LinearLayout>
+
 
     <android.support.design.widget.NavigationView
         android:id="@+id/id_main_navigation"

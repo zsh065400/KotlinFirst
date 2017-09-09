@@ -79,7 +79,7 @@ class BannerAdapter(context: Context, datas: ArrayList<Banner>) : BasePagerAdapt
             inflate.setOnClickListener {
                 val info = WebViewInfo(banner.title, banner.to_url)
                 val bundle = Bundle()
-                bundle.putParcelable("webinfo", info)
+                bundle.putSerializable("webinfo", info)
                 (context as MainActivity).startActivity<WebViewActivity>(bundle)
             }
             mViews.add(inflate)

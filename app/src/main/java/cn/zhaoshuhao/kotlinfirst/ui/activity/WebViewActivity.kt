@@ -22,7 +22,7 @@ class WebViewActivity : BaseActivity() {
 
     override fun prepareInitUI() {
         val bundle = intent.extras
-        mInfo = bundle.getParcelable<WebViewInfo>("webinfo")
+        mInfo = bundle.getSerializable("webinfo") as WebViewInfo
     }
 
     override fun initViews() {
