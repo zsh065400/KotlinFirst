@@ -7,8 +7,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.support.v4.app.ActivityCompat
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -19,26 +17,50 @@ object KPermission {
     private var handle: IPermissionResult? = null
     private var requestCode: Int? = null
 
-    private lateinit var handleOfLambda: ((gradnet: ArrayList<String>, denied: ArrayList<String>, neverShow: ArrayList<String>) -> Unit);
+    private lateinit var handleOfLambda: ((gradnet: List<String>, denied: List<String>, neverShow: List<String>) -> Unit);
+
+    private var isGranted: List<String> = listOf()
 
     /*避免同一时间多次请求，可不指定请求代码*/
+
+    fun checkSelf(permissions: List<String>, activity: Activity, callback: (List<out String>, List<String>) -> Unit) {
+        val instance = PermissionRequest(activity, 0, permissions)
+        instance.checkSelf(callback)
+    }
 
     fun request(vararg permissions: String, activity: Activity, before: IShowRationable? = null, handle: IPermissionResult, requestCode: Int = 0x111) {
         this.handle = handle
         this.requestCode = requestCode
-        val instance = PermissionRequest(activity, requestCode, permissions)
-        before?.onPrepareRequest(instance) ?: instance.proceed()
+        checkSelf(permissions.asList(), activity) { g, d ->
+            if (d.isNotEmpty()) {
+                val instance = PermissionRequest(activity, requestCode, d)
+                isGranted = g
+                before?.onPrepareRequest(instance) ?: instance.proceed()
+            } else {
+                handle.onGranted(g)
+                handle.onDenied(d)
+                handle.onNeverShow(listOf())
+            }
+        }
     }
 
-    fun requestOfLambda(vararg permissions: String, activity: Activity, before: IShowRationable? = null, requestCode: Int = 0x111, handleOfLambda: ((gradnet: ArrayList<String>, denied: ArrayList<String>, neverShow: ArrayList<String>) -> Unit)) {
+    fun requestOfLambda(vararg permissions: String, activity: Activity, before: IShowRationable? = null, requestCode: Int = 0x111, handleOfLambda: ((gradnet: List<out String>, denied: List<out String>, neverShow: List<out String>) -> Unit)) {
+        val p = permissions.asList()
         this.handleOfLambda = handleOfLambda
         this.requestCode = requestCode
-        val instance = PermissionRequest(activity, requestCode, permissions)
-        before?.onPrepareRequest(instance) ?: instance.proceed()
+        checkSelf(p, activity) { g, d ->
+            if (d.isNotEmpty()) {
+                val instance = PermissionRequest(activity, requestCode, d)
+                isGranted = g
+                before?.onPrepareRequest(instance) ?: instance.proceed()
+            } else {
+                handleOfLambda(g, d, listOf())
+            }
+        }
     }
 
-    fun handleResult(activity: Activity, requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode != requestCode) return
+    fun handleResult(activity: Activity, requestCode: Int, permissions: List<String>, grantResults: IntArray) {
+        if (this.requestCode != requestCode) return
         val granted = ArrayList<String>()
         val denied = ArrayList<String>()
         val neverShow = ArrayList<String>()
@@ -49,13 +71,13 @@ object KPermission {
             else if (!ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) neverShow.add(permission)
             else denied.add(permission)
         }
-        handle?.onGranted(granted)
+        handle?.onGranted(granted.plus(isGranted))
         handle?.onDenied(denied)
         handle?.onNeverShow(neverShow)
     }
 
-    fun handleResultOfLambda(activity: Activity, requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode != requestCode) return
+    fun handleResultOfLambda(activity: Activity, requestCode: Int, permissions: List<String>, grantResults: IntArray) {
+        if (this.requestCode != requestCode) return
         val granted = ArrayList<String>()
         val denied = ArrayList<String>()
         val neverShow = ArrayList<String>()
@@ -66,7 +88,7 @@ object KPermission {
             else if (!ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) neverShow.add(permission)
             else denied.add(permission)
         }
-        handleOfLambda(granted, denied, neverShow)
+        handleOfLambda(granted.plus(isGranted), denied, neverShow)
     }
 
     /*跳转到权限设置*/
@@ -87,32 +109,24 @@ object KPermission {
 
 data class PermissionRequest(private val activity: Activity,
                              private val requestCode: Int,
-                             private val permissions: Array<out String>) {
+                             private val permissions: List<String>) {
+    /**
+     * 检查需要请求的权限中未授权的权限
+     * */
+    fun checkSelf(callback: (List<String>, List<String>) -> Unit) {
+        val map = permissions.groupBy { ActivityCompat.checkSelfPermission(activity, it) == PackageManager.PERMISSION_GRANTED }
+        val granted = map[true]
+        val denied = map[false]
+        callback(granted ?: ArrayList<String>(), denied ?: ArrayList<String>())
+    }
+
     fun proceed() {
-        ActivityCompat.requestPermissions(activity, permissions, requestCode)
-        log(LogType.INFO, "KPermission : PermissionRequest, proceed -----> ", permissions.toString())
+        ActivityCompat.requestPermissions(activity, permissions.toTypedArray(), requestCode)
+        log(LogType.INFO, "KPermission : PermissionRequest, proceed -----> ", permissions.let { it.toString() })
     }
 
     fun cancel() {
         log(LogType.INFO, "KPermission : PermissionRequest, cancel -----> ", permissions.toString())
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as PermissionRequest
-
-        if (requestCode != other.requestCode) return false
-        if (!Arrays.equals(permissions, other.permissions)) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = requestCode
-        result = 31 * result + Arrays.hashCode(permissions)
-        return result
     }
 }
 
@@ -121,9 +135,9 @@ interface IShowRationable {
 }
 
 interface IPermissionResult {
-    fun onGranted(permission: ArrayList<String>)
+    fun onGranted(permission: List<String>){}
 
-    fun onDenied(permission: ArrayList<String>)
+    fun onDenied(permission: List<String>){}
 
-    fun onNeverShow(permission: ArrayList<String>)
+    fun onNeverShow(permission: List<String>){}
 }

@@ -61,7 +61,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
 //        KPermission.handleResult(this, requestCode, permissions, grantResults)
-        KPermission.handleResultOfLambda(this, requestCode, permissions, grantResults)
+        KPermission.handleResultOfLambda(this, requestCode, permissions.asList(), grantResults)
     }
 }
 

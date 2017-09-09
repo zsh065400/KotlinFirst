@@ -1,10 +1,13 @@
 package cn.zhaoshuhao.kotlinfirst.ui.activity
 
+import android.Manifest
 import android.os.Bundle
 import android.os.Handler
 import cn.zhaoshuhao.kotlinfirst.R
 import cn.zhaoshuhao.kotlinfirst.base.BaseActivity
 import cn.zhaoshuhao.kotlinfirst.base.startActivity
+import cn.zhaoshuhao.kotlinfirst.base.toast
+import cn.zhaoshuhao.kotlinfirst.utils.KPermission
 import cn.zhaoshuhao.kotlinfirst.utils.SPExt
 
 class SplashActivity : BaseActivity() {
@@ -15,13 +18,18 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mHandler.postDelayed({
-            if (mIsFirst) {
-                startActivity<GuideActivity>()
-                mIsFirst = false
-            } else startActivity<MainActivity>()
-            finish()
-        }, 3000)
+        KPermission.requestOfLambda(Manifest.permission.READ_PHONE_STATE, activity = this) { g, d, n ->
+            mHandler.postDelayed({
+                if (mIsFirst) {
+                    startActivity<GuideActivity>()
+                    mIsFirst = false
+                } else startActivity<MainActivity>()
+                finish()
+            }, 3000)
+            if (d.size != 0 || n.size != 0) {
+                toast("软件运行需要该权限")
+            }
+        }
     }
 
     override fun obtainLayoutID(): Int = R.layout.activity_splash
