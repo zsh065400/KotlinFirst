@@ -60,7 +60,7 @@ class MainPresent(private val context: Context) : Main.Present {
     override fun loadBanner() {
         GetBannerData.execute(object : LoadListener<ArrayList<Banner>> {
             override fun onSuccess(data: ArrayList<Banner>?) {
-                if (data != null && data.size != 0) {
+                if (data != null && data.size > 0) {
                     mainView.initBanner(data)
                     bannerJson = listToJson(data)
                     Log.d("Banner Data", bannerJson)
@@ -79,7 +79,7 @@ class MainPresent(private val context: Context) : Main.Present {
     override fun loadFilm() {
         GetFilmData.execute(object : LoadListener<ArrayList<Film>> {
             override fun onSuccess(data: ArrayList<Film>?) {
-                if (data != null && data.size != 0) {
+                if (data != null && data.size > 0) {
                     mainView.initFilm(data)
                     filmJson = listToJson(data)
                 } else {
@@ -97,7 +97,7 @@ class MainPresent(private val context: Context) : Main.Present {
     override fun loadYouLike() {
         GetYourLike.execute(object : LoadListener<ArrayList<GuessYouLike>> {
             override fun onSuccess(data: ArrayList<GuessYouLike>?) {
-                if (data != null && data.size != 0) {
+                if (data != null && data.size > 0) {
                     mainView.initYouLike(data)
                     youLikeJson = listToJson(data)
                 } else {

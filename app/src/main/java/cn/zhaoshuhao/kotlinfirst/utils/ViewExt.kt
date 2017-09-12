@@ -1,12 +1,16 @@
 package cn.zhaoshuhao.kotlinfirst.utils
 
 import android.content.Context
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.util.SparseArray
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
+import cn.zhaoshuhao.kotlinfirst.R
 import cn.zhaoshuhao.kotlinfirst.model.bean.WebViewInfo
 import com.bumptech.glide.Glide
 import com.tencent.smtt.export.external.interfaces.WebResourceError
@@ -19,6 +23,19 @@ import com.tencent.smtt.sdk.WebViewClient
  * Created by Scout
  * Created on 2017/7/28 19:53.
  */
+
+fun SwipeRefreshLayout.default(listener: SwipeRefreshLayout.OnRefreshListener) {
+    setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
+    setOnRefreshListener(listener)
+}
+
+fun RecyclerView.vertical(context: Context) = with(this) {
+    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+}
+
+fun RecyclerView.horizontal(context: Context) = with(this) {
+    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+}
 
 fun AppCompatActivity.defaultToolbarOptions(toolbar: Toolbar, title: String, navigation: View.OnClickListener?) {
     with(toolbar) {

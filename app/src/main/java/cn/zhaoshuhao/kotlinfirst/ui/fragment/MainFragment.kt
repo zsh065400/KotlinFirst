@@ -1,5 +1,6 @@
 package cn.zhaoshuhao.kotlinfirst.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
@@ -18,6 +19,7 @@ import cn.zhaoshuhao.kotlinfirst.model.bean.TypeInfo
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Banner
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Film
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.GuessYouLike
+import cn.zhaoshuhao.kotlinfirst.ui.activity.IRefreshListener
 import cn.zhaoshuhao.kotlinfirst.ui.activity.ProductDetailActivity
 import cn.zhaoshuhao.kotlinfirst.ui.view.Indicator
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -29,6 +31,12 @@ import kotlinx.android.synthetic.main.fragment_main.*
 class MainFragment : BaseFragment(), Main.View {
 
     private lateinit var mainPresent: Main.Present
+    private lateinit var refreshListener: IRefreshListener
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        refreshListener = context as IRefreshListener
+    }
 
     override fun setPresent(present: Main.Present) {
         this.mainPresent = present
@@ -45,11 +53,13 @@ class MainFragment : BaseFragment(), Main.View {
         id_main_refresh.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
         id_main_refresh.setOnRefreshListener {
             mainPresent.onStart()
+            refreshListener.isRefreshing()
         }
     }
 
     override fun onRefreshComplete() {
         id_main_refresh.isRefreshing = false
+        refreshListener.refreshComplete()
     }
 
     val mCallback = Handler()
@@ -114,6 +124,8 @@ class MainFragment : BaseFragment(), Main.View {
     }
 
     override fun initYouLike(youlikes: ArrayList<GuessYouLike>) {
+//        val paddingBottom = arguments.getInt("height")
+//        id_recv_you_like.setPadding(0,0,0, paddingBottom)
         id_recv_you_like.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
         id_recv_you_like.isNestedScrollingEnabled = false
         id_recv_you_like.adapter = YourLikeAdapter(this.context, youlikes, object : BaseSupportAdapter.OnItemClickListener<GuessYouLike> {
@@ -146,6 +158,10 @@ class MainFragment : BaseFragment(), Main.View {
     override fun onStop() {
         super.onStop()
         mCallback.removeCallbacks(mAutoScroll)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
     }
 
     private val mAutoScroll = AutoScroll()

@@ -1,144 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="#ffffff"
               android:fitsSystemWindows="true"
+              android:focusable="true"
+              android:focusableInTouchMode="true"
               android:orientation="vertical">
 
-    <RelativeLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/id_city_toolbar"
+        style="@style/Toolbar.MyStyle"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="?android:attr/actionBarSize"
         android:background="@color/colorPrimary"
-        android:visibility="gone">
+        app:theme="@style/AppTheme.DrawerArrowStyle"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:titleTextColor="@android:color/white">
 
-        <ImageView
-            android:id="@+id/imgBack"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/bar_back"/>
+    </android.support.v7.widget.Toolbar>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="城市选择"
-            android:textColor="@color/white"
-            android:textSize="16sp"/>
-    </RelativeLayout>
-
-
-    <LinearLayout
+    <com.lljjcoder.citylist.widget.CleanableEditView
+        android:id="@+id/cityInputText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:padding="5dp">
-
-        <com.lljjcoder.citylist.widget.CleanableEditView
-            android:id="@+id/cityInputText"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@drawable/edittext_bg"
-            android:drawableLeft="@drawable/search_bar_icon_normal"
-            android:drawablePadding="5dp"
-            android:drawableRight="@drawable/input_close"
-            android:gravity="left|center_vertical"
-            android:hint="请输入城市"
-            android:padding="10dp"
-            android:textColor="@color/color_text_02"
-            android:textColorHint="@color/color_text_01"
-            android:textSize="14sp"/>
-
-
-    </LinearLayout>
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/edittext_bg"
+        android:drawableLeft="@drawable/ic_search_black_24dp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/input_close"
+        android:gravity="left|center_vertical"
+        android:hint="请输入城市"
+        android:padding="10dp"
+        android:textColor="@color/color_text_02"
+        android:textColorHint="@color/color_text_01"
+        android:textSize="14sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_draw1"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="10dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/currentCityTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="当前城市"
+            android:textColor="@color/text_color_02"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/currentCityTag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="当前城市"
-                android:textColor="@color/text_color_02"
-                android:textSize="12sp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/currentCity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/currentCityTag"
-                android:ellipsize="none"
-                android:singleLine="true"
-                android:textColor="@color/text_color_02"
-                android:textSize="12sp"
-                android:textStyle="bold"/>
-        </RelativeLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/sort_catagory"
-        android:orientation="vertical"
-        android:paddingBottom="15dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="15dp"
-        android:visibility="gone">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/localCityTag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="定位城市"
-                android:textColor="@color/text_color_02"
-                android:textSize="12sp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/localCity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/localCityTag"
-                android:background="@drawable/bg_draw13"
-                android:ellipsize="middle"
-                android:gravity="center"
-                android:maxLength="4"
-                android:paddingBottom="8dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="8dp"
-                android:textColor="@color/text_color_02"
-                android:textSize="12sp"/>
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/currentCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/currentCityTag"
+            android:ellipsize="none"
+            android:singleLine="true"
+            android:textColor="@color/text_color_02"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <ListView
             android:id="@+id/country_lvcountry"
@@ -147,6 +80,23 @@
             android:layout_gravity="center"
             android:divider="@color/split_line_color"
             android:dividerHeight="1px"/>
+
+        <TextView
+            android:id="@+id/id_city_catalog"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@color/sort_catagory"
+            android:padding="10dp"
+            android:textColor="@color/text_color_02"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <com.lljjcoder.citylist.sortlistview.SideBar
+            android:id="@+id/sidrbar"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|center"/>
 
         <TextView
             android:id="@+id/dialog"
@@ -158,11 +108,5 @@
             android:textColor="@color/text_color_02"
             android:textSize="20sp"
             android:visibility="gone"/>
-
-        <com.lljjcoder.citylist.sortlistview.SideBar
-            android:id="@+id/sidrbar"
-            android:layout_width="30.0dip"
-            android:layout_height="fill_parent"
-            android:layout_gravity="right|center"/>
     </FrameLayout>
 </LinearLayout>

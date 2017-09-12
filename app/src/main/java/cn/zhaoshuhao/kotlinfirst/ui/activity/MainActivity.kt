@@ -1,6 +1,7 @@
 package cn.zhaoshuhao.kotlinfirst.ui.activity
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -21,6 +22,7 @@ import cn.zhaoshuhao.kotlinfirst.R
 import cn.zhaoshuhao.kotlinfirst.base.BaseActivity
 import cn.zhaoshuhao.kotlinfirst.base.startActivity
 import cn.zhaoshuhao.kotlinfirst.base.toast
+import cn.zhaoshuhao.kotlinfirst.contract.AroundPresent
 import cn.zhaoshuhao.kotlinfirst.contract.MainPresent
 import cn.zhaoshuhao.kotlinfirst.fragment.*
 import cn.zhaoshuhao.kotlinfirst.model.db.KDbHelper
@@ -30,13 +32,14 @@ import com.amap.api.location.AMapLocationClientOption
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.lljjcoder.citylist.CityListSelectActivity
+import com.lljjcoder.citylist.bean.CityInfoBean
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 
 
-
-class MainActivity : BaseActivity(), CheckoutToolbar {
+class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
     private val mTabText = arrayOf("主页", "周边", "已购", "我的")
+    private var mHomeTabText = mTabText[0]
 
     private val mTabIcon = arrayOf(R.drawable.ic_tab_artists, R.drawable.ic_tab_albums,
             R.drawable.ic_tab_cart, R.drawable.ic_tab_songs)
@@ -46,7 +49,13 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
         val mainPresent = MainPresent(this)
         mainFragment.setPresent(mainPresent)
         mainPresent.setView(mainFragment)
-        arrayOf(mainFragment, ARoundFragment(),
+
+        val aroundFragment = ARoundFragment()
+        val aroundPresent = AroundPresent(this)
+        aroundFragment.setPresent(aroundPresent)
+        aroundPresent.setView(aroundFragment)
+
+        arrayOf(mainFragment, aroundFragment,
                 MineFragment(), MoreFragment())
     }
 
@@ -58,7 +67,7 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
                 activity = this) { g, d, n ->
             /*针对权限做不同处理*/
         }
-        mTabTarget
+        mTabTarget/*利用Kotlin机制初始化数据，此处防止切换时数据丢失*/
         locationClient
         initFragmentUI();
     }
@@ -117,7 +126,6 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
 
     private fun doLocation() {
         KPermission.requestOfLambda(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, activity = this) { g, d, _ ->
-            toast("定位权限回调")
             if (g.isNotEmpty()) {
 //                val option: AMapLocationClientOption = getDefaultOption()
 //                locationClient.setLocationOption(option)
@@ -136,6 +144,7 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
 //                }
 //                locationClient.startLocation()
                 val intent = Intent(this@MainActivity, CityListSelectActivity::class.java)
+                intent.putExtra("city", if (mHomeTabText == "主页") null else mHomeTabText)
                 startActivityForResult(intent, CityListSelectActivity.CITY_SELECT_RESULT_FRAG)
             }
             if (d.isNotEmpty()) toast("${d.toString()}权限被拒绝")
@@ -223,11 +232,17 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
                 menu?.findItem(R.id.id_main_location)?.isVisible = true
                 menu?.findItem(R.id.id_main_map)?.isVisible = false
             }
-            else -> {
+            1 -> {
                 menu?.findItem(R.id.id_main_search)?.isVisible = false
                 menu?.findItem(R.id.id_main_scan)?.isVisible = false
                 menu?.findItem(R.id.id_main_location)?.isVisible = false
                 menu?.findItem(R.id.id_main_map)?.isVisible = true
+            }
+            else -> {
+                menu?.findItem(R.id.id_main_search)?.isVisible = false
+                menu?.findItem(R.id.id_main_scan)?.isVisible = false
+                menu?.findItem(R.id.id_main_location)?.isVisible = false
+                menu?.findItem(R.id.id_main_map)?.isVisible = false
             }
         }
         return super.onPrepareOptionsMenu(menu)
@@ -289,6 +304,17 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
         })
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == CityListSelectActivity.CITY_SELECT_RESULT_FRAG) {
+            if (resultCode == Activity.RESULT_OK) {
+                val cityInfoBean: CityInfoBean = data?.extras?.getParcelable<CityInfoBean>("cityinfo")!!
+                mHomeTabText = cityInfoBean?.name ?: "主页"
+                refreshToolbarTitle(mHomeTabText)
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     override fun onBackPressed() {
         if (id_main_drawer.isDrawerOpen(Gravity.START)) {
             id_main_drawer.closeDrawer(Gravity.START)
@@ -308,14 +334,35 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
 
     override fun toTarget(fragment: Fragment) {
         when (fragment) {
-            is MainFragment -> mCurrentPage = 0
+            is MainFragment -> {
+                mCurrentPage = 0
+                refreshToolbarTitle(mHomeTabText)
+                return
+            }
             is ARoundFragment -> mCurrentPage = 1
             is MineFragment -> mCurrentPage = 2
             is MoreFragment -> mCurrentPage = 3
-
         }
-        title = mTabText[mCurrentPage]
+        refreshToolbarTitle(mTabText[mCurrentPage])
+    }
+
+    private fun refreshToolbarTitle(title: String) {
+        supportActionBar?.title = title
         invalidateOptionsMenu()
+    }
+
+    private var isRefreshing = false
+
+    override fun isRefreshing() {
+        id_main_bottom_navigation.hide()
+        isRefreshing = true
+        logd("刷新回调")
+    }
+
+    override fun refreshComplete() {
+        id_main_bottom_navigation.show()
+        isRefreshing = true
+        logd("刷新结束")
     }
 
     /**
@@ -333,5 +380,9 @@ class MainActivity : BaseActivity(), CheckoutToolbar {
     }
 }
 
+interface IRefreshListener {
+    fun isRefreshing()
 
+    fun refreshComplete()
+}
 

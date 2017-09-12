@@ -1,16 +1,44 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!-- Base application theme. -->
+    <style name="AppTheme"
+           parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!--<item name="windowNoTitle">true</item>-->
+        <!--<item name="android:windowNoTitle">true</item>-->
+        <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowStyle</item>
+        <!--设置MenuItem的图标颜色-->
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <!--<item name="android:statusBarColor">@color/colorPrimary</item>-->
     </style>
 
-    <style name="AnimBottom" parent="@android:style/Animation">
+    <style name="AnimBottom"
+           parent="@android:style/Animation">
         <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
         <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
+    </style>
+
+    <!--设置Toolbar标题距离左侧按键的距离-->
+    <style name="Toolbar.MyStyle"
+           parent="Base.Widget.AppCompat.Toolbar">
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+    </style>
+
+    <style name="AppTheme.DrawerArrowStyle"
+           parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/white</item>
+        <item name="android:colorControlNormal">@android:color/white</item>
+    </style>
+
+    <!--Toolbar的文字大小-->
+    <style name="Toolbar.TitleText"
+           parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">18sp</item>
     </style>
 
 </resources>
