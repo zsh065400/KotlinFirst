@@ -71,6 +71,7 @@ dependencies {
     compile 'com.amap.api:location:latest.integration'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
     compile project(':citypickerview')
+    compile "org.jetbrains.anko:anko:$anko_version"
 }
 //apply plugin: 'kotlin-kapt'
 

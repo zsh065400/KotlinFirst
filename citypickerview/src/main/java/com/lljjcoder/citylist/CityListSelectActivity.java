@@ -3,12 +3,13 @@ package com.lljjcoder.citylist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,12 +32,10 @@ public class CityListSelectActivity extends AppCompatActivity {
     CleanableEditView mCityTextSearch;
     TextView mCurrentCityTag;
     TextView mCurrentCity;
-    TextView mLocalCityTag;
-    TextView mLocalCity;
     ListView sortListView;
     TextView mDialog;
+    TextView mCurrentCatalog;
     SideBar mSidrbar;
-    ImageView imgBack;
 
     public SortAdapter adapter;
 
@@ -67,24 +66,39 @@ public class CityListSelectActivity extends AppCompatActivity {
         initList();
 
         setCityData(CityUtils.getCityList());
+
+        initToolbar();
+
+        initCurrentCity();
+    }
+
+    private void initCurrentCity() {
+        final String city = getIntent().getStringExtra("city");
+        mCurrentCity.setText(city == null ? "定位失败" : city);
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.id_city_toolbar);
+        toolbar.setTitle("选择城市");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     private void initView() {
         mCityTextSearch = (CleanableEditView) findViewById(R.id.cityInputText);
         mCurrentCityTag = (TextView) findViewById(R.id.currentCityTag);
         mCurrentCity = (TextView) findViewById(R.id.currentCity);
-        mLocalCityTag = (TextView) findViewById(R.id.localCityTag);
-        mLocalCity = (TextView) findViewById(R.id.localCity);
         sortListView = (ListView) findViewById(R.id.country_lvcountry);
         mDialog = (TextView) findViewById(R.id.dialog);
+        mCurrentCatalog = (TextView) findViewById(R.id.id_city_catalog);
         mSidrbar = (SideBar) findViewById(R.id.sidrbar);
-        imgBack = (ImageView) findViewById(R.id.imgBack);
-        imgBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
 
@@ -99,6 +113,21 @@ public class CityListSelectActivity extends AppCompatActivity {
         // 根据a-z进行排序源数据
         Collections.sort(sourceDateList, pinyinComparator);
         adapter.notifyDataSetChanged();
+
+        sortListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (!sourceDateList.isEmpty()) {
+                    final String letters = sourceDateList.get(firstVisibleItem).getSortLetters();
+                    mCurrentCatalog.setText(letters);
+                }
+            }
+        });
     }
 
     /**

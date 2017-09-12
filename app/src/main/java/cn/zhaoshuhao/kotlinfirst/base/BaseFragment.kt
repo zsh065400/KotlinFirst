@@ -21,10 +21,6 @@ abstract class BaseFragment : Fragment() {
         retainInstance = true
     }
 
-    abstract fun obtainLayoutID(): Int
-
-    abstract fun initView(view: View?, savedBundle: Bundle?)
-
     final override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(obtainLayoutID(), container, false)
     }
@@ -33,6 +29,10 @@ abstract class BaseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView(view, savedInstanceState)
     }
+
+    abstract fun obtainLayoutID(): Int
+
+    abstract fun initView(view: View?, savedBundle: Bundle?)
 
     /*
     * 在这里进行一些初始化，第一时间调用

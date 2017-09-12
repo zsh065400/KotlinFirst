@@ -27,6 +27,8 @@ const val FILM = "LaShouO2O/film.do"
 
 const val YOU_LIKE = "LaShouO2O/youLike.do"
 
+const val AROUND = "LaShouO2O/around.do"
+
 
 interface NetTask<out T> {
     fun execute(loadListener: LoadListener<T>)

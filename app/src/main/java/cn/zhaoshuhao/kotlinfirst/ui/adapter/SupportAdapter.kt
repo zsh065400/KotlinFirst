@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import cn.zhaoshuhao.kotlinfirst.R
+import cn.zhaoshuhao.kotlinfirst.model.network.entity.Around
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Film
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.GuessYouLike
 import cn.zhaoshuhao.kotlinfirst.utils.findViewOften
@@ -20,29 +21,61 @@ import com.bumptech.glide.Glide
  * Created by Scout
  * Created on 2017/8/1 21:49.
  */
+class AroundInfoAdapter(context: Context, datas: ArrayList<Around>, listener: BaseSupportAdapter.OnItemClickListener<Around>?) : BaseSupportAdapter<Around>(context, datas, listener) {
+    override fun onCreateViewWithId(): Int = R.layout.around_item
+
+    override fun onBindViewHolder(holder: SupportViewHolder?, position: Int) {
+        if (holder == null) return
+        else
+            with(holder) {
+                val around = datas[position]
+                val title = findView<TextView>(R.id.id_around_title)
+                val price = findView<TextView>(R.id.id_around_price)
+                val origin = findView<TextView>(R.id.id_around_origin)
+                val delivery = findView<TextView>(R.id.id_around_delivery)
+                val image = findView<ImageView>(R.id.id_around_image)
+
+                image.load(context, around.img)
+                title.text = around.name
+                price.text = around.price.toString()
+                origin.text = around.origin.toString()
+                origin.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG
+                delivery.text = "配送费：${around.delivery.toString()}"
+            }
+    }
+
+    fun reset(new: List<Around>) {
+        datas.clear()
+        datas.addAll(new)
+//        notifyItemRangeChanged(0, datas.size)
+        this.notifyDataSetChanged()
+    }
+}
+
 class YourLikeAdapter(context: Context, datas: ArrayList<GuessYouLike>, listener: BaseSupportAdapter.OnItemClickListener<GuessYouLike>?) : BaseSupportAdapter<GuessYouLike>(context, datas, listener) {
     override fun onCreateViewWithId(): Int = R.layout.main_you_like_item
 
     override fun onBindViewHolder(holder: SupportViewHolder?, position: Int) {
         if (holder == null) return
-        with(holder!!) {
-            val youLike = datas[position]
-            val imageView = findView<ImageView>(R.id.id_ylike_image)
-            val product = findView<TextView>(R.id.id_ylike_product)
-            val title = findView<TextView>(R.id.id_ylike_title)
-            val price = findView<TextView>(R.id.id_ylike_price)
-            val value = findView<TextView>(R.id.id_ylike_value)
-            val bought = findView<TextView>(R.id.id_ylike_bought)
-            val imageUrl = youLike.images[2].image
-            imageView.load(context, imageUrl)
+        else
+            with(holder) {
+                val youLike = datas[position]
+                val imageView = findView<ImageView>(R.id.id_ylike_image)
+                val product = findView<TextView>(R.id.id_ylike_product)
+                val title = findView<TextView>(R.id.id_ylike_title)
+                val price = findView<TextView>(R.id.id_ylike_price)
+                val value = findView<TextView>(R.id.id_ylike_value)
+                val bought = findView<TextView>(R.id.id_ylike_bought)
+                val imageUrl = youLike.images[2].image
+                imageView.load(context, imageUrl)
 
-            product.text = youLike.product
-            title.text = youLike.title
-            price.text = youLike.price
-            value.text = youLike.value
-            value.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG/*中线*/
-            bought.text = "已售${youLike.bought.toString()}份"
-        }
+                product.text = youLike.product
+                title.text = youLike.title
+                price.text = youLike.price
+                value.text = youLike.value
+                value.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG/*中线*/
+                bought.text = "已售${youLike.bought.toString()}份"
+            }
     }
 
 }
