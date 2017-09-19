@@ -3,7 +3,6 @@ package cn.zhaoshuhao.kotlinfirst.fragment
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -117,7 +116,7 @@ class MainFragment : BaseFragment(), Main.View {
 //        id_recv_film.addItemDecoration(DividerItemDecoration(this.context, LinearLayoutManager.HORIZONTAL))
 
         id_recv_film.adapter = FilmAdapter(this.context, films, object : BaseSupportAdapter.OnItemClickListener<Film> {
-            override fun onClick(data: Film, position: Int) {
+            override fun onClick(view: View, data: Film, position: Int) {
                 Toast.makeText(this@MainFragment.context, data.filmName, Toast.LENGTH_SHORT).show()
             }
         })
@@ -129,7 +128,7 @@ class MainFragment : BaseFragment(), Main.View {
         id_recv_you_like.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
         id_recv_you_like.isNestedScrollingEnabled = false
         id_recv_you_like.adapter = YourLikeAdapter(this.context, youlikes, object : BaseSupportAdapter.OnItemClickListener<GuessYouLike> {
-            override fun onClick(data: GuessYouLike, position: Int) {
+            override fun onClick(view: View, data: GuessYouLike, position: Int) {
                 val bundle = Bundle()
                 bundle.putSerializable("product", data)
                 activity.startActivity<ProductDetailActivity>(bundle)
@@ -152,7 +151,6 @@ class MainFragment : BaseFragment(), Main.View {
     override fun onResume() {
         super.onResume()
         mCallback.postDelayed(mAutoScroll, 3000)
-        checkout(activity as CheckoutToolbar)
     }
 
     override fun onStop() {
@@ -172,14 +170,6 @@ class MainFragment : BaseFragment(), Main.View {
             mCallback.postDelayed(this, 3000)
         }
     }
-}
-
-interface CheckoutToolbar {
-    fun toTarget(fragment: Fragment)
-}
-
-fun Fragment.checkout(callback: CheckoutToolbar) {
-    callback.toTarget(this)
 }
 
 class IndicatorChangeListener(private val indicator: Indicator) : ViewPager.OnPageChangeListener {

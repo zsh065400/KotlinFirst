@@ -6,21 +6,76 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.TextView
 import cn.zhaoshuhao.kotlinfirst.R
+import cn.zhaoshuhao.kotlinfirst.model.bean.ShoppingCart
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Around
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Film
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.GuessYouLike
 import cn.zhaoshuhao.kotlinfirst.utils.findViewOften
 import cn.zhaoshuhao.kotlinfirst.utils.load
 import cn.zhaoshuhao.kotlinfirst.utils.obtainDefault
+import cn.zhaoshuhao.kotlinfirst.widget.CartNumberChanged
 import com.bumptech.glide.Glide
 
 /**
  * Created by Scout
  * Created on 2017/8/1 21:49.
  */
+class CartAdapter(context: Context, datas: ArrayList<ShoppingCart>, listener: BaseSupportAdapter.OnItemClickListener<ShoppingCart>?) : BaseSupportAdapter<ShoppingCart>(context, datas, listener) {
+
+    override fun onCreateViewWithId(): Int = R.layout.item_cart
+
+    override fun onBindViewHolder(holder: SupportViewHolder?, position: Int) {
+        if (holder == null) return
+        else
+            with(holder) {
+                val cart = datas[position]
+                val icon = findView<ImageView>(R.id.id_cart_iv_icon)
+                val name = findView<TextView>(R.id.id_cart_tv_name)
+                val price = findView<TextView>(R.id.id_cart_tv_price)
+                val value = findView<TextView>(R.id.id_cart_tv_value)
+                val num = findView<CartNumberChanged>(R.id.id_cart_num)
+                val checkbox = findView<CheckBox>(R.id.id_cart_cb_choice)
+                checkbox.isChecked = false
+
+                checkbox.setOnCheckedChangeListener { btn, checked ->
+                    checkedChange?.invoke(btn, checked, cart)
+                }
+                num.changedCallBack = { view, value ->
+                    changedCallback?.invoke(view, value, cart)
+                }
+
+                icon.load(context, cart.img)
+                name.text = cart.name
+                price.text = cart.price
+                value.text = cart.value
+                value.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG
+                num.value = cart.num.toInt()
+            }
+    }
+
+    fun reset(newDatas: List<ShoppingCart>) {
+        datas.clear()
+        datas.addAll(newDatas)
+        this.notifyDataSetChanged()
+    }
+
+    private var checkedChange: ((CompoundButton, Boolean, ShoppingCart) -> Unit)? = null
+    private var changedCallback: ((View, Int, ShoppingCart) -> Unit)? = null
+
+    fun setItemChoiceListener(block: (CompoundButton, Boolean, ShoppingCart) -> Unit) {
+        checkedChange = block
+    }
+
+    fun setNumChangedListener(block: (View, Int, ShoppingCart) -> Unit) {
+        changedCallback = block
+    }
+}
+
 class AroundInfoAdapter(context: Context, datas: ArrayList<Around>, listener: BaseSupportAdapter.OnItemClickListener<Around>?) : BaseSupportAdapter<Around>(context, datas, listener) {
     override fun onCreateViewWithId(): Int = R.layout.around_item
 
@@ -77,7 +132,6 @@ class YourLikeAdapter(context: Context, datas: ArrayList<GuessYouLike>, listener
                 bought.text = "已售${youLike.bought.toString()}份"
             }
     }
-
 }
 
 class FilmAdapter(context: Context, datas: ArrayList<Film>, listener: OnItemClickListener<Film>? = null) : BaseSupportAdapter<Film>(context, datas, listener) {
@@ -96,23 +150,25 @@ class FilmAdapter(context: Context, datas: ArrayList<Film>, listener: OnItemClic
 }
 
 abstract class BaseSupportAdapter<T>(val context: Context, val datas: ArrayList<T>, var listener: OnItemClickListener<T>? = null) : RecyclerView.Adapter<BaseSupportAdapter<T>.SupportViewHolder>() {
+    open var viewHolder: SupportViewHolder? = null
+
     abstract fun onCreateViewWithId(): Int
 
     abstract override fun onBindViewHolder(holder: SupportViewHolder?, position: Int)
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): SupportViewHolder {
         val inflate = LayoutInflater.from(context).inflate(onCreateViewWithId(), parent, false)
-        return SupportViewHolder(inflate)
+        viewHolder = SupportViewHolder(inflate)
+        return viewHolder!!
     }
 
     override fun getItemCount(): Int = datas.size
 
-
-    inner class SupportViewHolder(val root: View) : RecyclerView.ViewHolder(root) {
+    inner class SupportViewHolder(private val root: View) : RecyclerView.ViewHolder(root) {
         init {
             if (listener != null) root.setOnClickListener {
                 listener?.
-                        onClick(datas[layoutPosition], layoutPosition)
+                        onClick(root, datas[layoutPosition], layoutPosition)
             }
         }
 
@@ -124,6 +180,7 @@ abstract class BaseSupportAdapter<T>(val context: Context, val datas: ArrayList<
     }
 
     interface OnItemClickListener<T> {
-        fun onClick(data: T, position: Int)
+
+        fun onClick(view: View, data: T, position: Int)
     }
 }

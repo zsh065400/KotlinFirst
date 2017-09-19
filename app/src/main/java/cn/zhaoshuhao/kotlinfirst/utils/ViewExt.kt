@@ -24,6 +24,11 @@ import com.tencent.smtt.sdk.WebViewClient
  * Created on 2017/7/28 19:53.
  */
 
+fun Context.dp2px(dp: Int): Float {
+    val metrics = resources.displayMetrics
+    return dp * metrics.density
+}
+
 fun SwipeRefreshLayout.default(listener: SwipeRefreshLayout.OnRefreshListener) {
     setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
     setOnRefreshListener(listener)

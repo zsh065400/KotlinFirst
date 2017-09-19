@@ -20,8 +20,7 @@
     <com.tencent.smtt.sdk.WebView
         android:id="@+id/id_web_detail"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:padding="5dp">
+        android:layout_height="fill_parent">
 
     </com.tencent.smtt.sdk.WebView>
 

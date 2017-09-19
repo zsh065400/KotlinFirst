@@ -2,10 +2,13 @@ package cn.zhaoshuhao.kotlinfirst.utils
 
 import android.app.Activity
 import android.content.Context
+import android.database.Cursor
 import android.graphics.Color
 import android.net.ConnectivityManager
+import android.os.Looper
 import android.util.Log
 import android.view.WindowManager
+import com.google.gson.Gson
 
 /**
  * Created by Scout
@@ -66,7 +69,28 @@ fun async(block: () -> Unit) {
     Thread(block).start()
 }
 
+fun asyncInUiThread(block: () -> Unit) {
+    android.os.Handler(Looper.getMainLooper()).post(block)
+}
+
+fun asyncWithDelayInUiThread(delay: Long, block: () -> Unit) {
+    android.os.Handler(Looper.getMainLooper()).postDelayed(block, delay)
+}
+
 fun Context.obtainNetStatus(): Boolean {
     val connService: ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     return connService?.activeNetworkInfo == null || connService?.activeNetworkInfo.isAvailable
+}
+
+inline fun <reified T> Cursor.toList(): ArrayList<T> {
+    val datas = arrayListOf<T>()
+    if (this != null && this.count != 0) {
+        while (this.moveToNext()) {
+            val json = this.getString(this.getColumnIndex(this.getColumnName(2)))
+            val t = Gson().fromJson(json, T::class.java)
+            datas.add(t)
+        }
+    }
+    this.close()
+    return datas
 }

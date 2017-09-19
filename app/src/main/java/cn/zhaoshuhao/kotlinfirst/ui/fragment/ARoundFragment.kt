@@ -40,10 +40,9 @@ class ARoundFragment : BaseFragment(), Around.View {
 
     override fun initAroundInfo(info: ArrayList<cn.zhaoshuhao.kotlinfirst.model.network.entity.Around>) {
         println("调用")
-        id_around_empty_error.visibility = View.GONE
         id_around_rv_content.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         adapter = AroundInfoAdapter(context, info, object : BaseSupportAdapter.OnItemClickListener<cn.zhaoshuhao.kotlinfirst.model.network.entity.Around> {
-            override fun onClick(data: cn.zhaoshuhao.kotlinfirst.model.network.entity.Around, position: Int) {
+            override fun onClick(view: View, data: cn.zhaoshuhao.kotlinfirst.model.network.entity.Around, position: Int) {
                 context.toast(tk[(Math.random() * 6).toInt()])
             }
         })
@@ -63,7 +62,7 @@ class ARoundFragment : BaseFragment(), Around.View {
     }
 
     override fun loadError() {
-        id_around_empty_error.visibility = View.VISIBLE
+
     }
 
     override fun initView(view: View?, savedBundle: Bundle?) {
@@ -121,9 +120,4 @@ class ARoundFragment : BaseFragment(), Around.View {
     }
 
     override fun obtainLayoutID(): Int = R.layout.fragment_around
-
-    override fun onResume() {
-        super.onResume()
-        checkout(activity as CheckoutToolbar)
-    }
 }
