@@ -16,7 +16,7 @@
             android:layout_weight="1"
             android:entries="@array/around_type_arrays"
             android:padding="0dp"
-            android:theme="@style/ViewTheme.Arrow">
+            android:theme="@style/ViewTheme.Default">
 
         </Spinner>
 
@@ -28,7 +28,7 @@
             android:layout_weight="1"
             android:entries="@array/around_sort_arrays"
             android:padding="0dp"
-            android:theme="@style/ViewTheme.Arrow">
+            android:theme="@style/ViewTheme.Default">
 
         </Spinner>
 
@@ -39,41 +39,32 @@
             android:layout_weight="1"
             android:entries="@array/around_exercise_arrays"
             android:padding="0dp"
-            android:theme="@style/ViewTheme.Arrow">
+            android:theme="@style/ViewTheme.Default">
 
         </Spinner>
 
     </LinearLayout>
+
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/id_around_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/id_around_rv_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="58dp">
+                android:paddingBottom="58dp"
+                >
 
             </android.support.v7.widget.RecyclerView>
-
-            <TextView
-                android:id="@+id/id_around_empty_error"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="气煞老夫，啥也没有"
-                android:textSize="30dp"
-                android:visibility="gone"/>
-
-        </FrameLayout>
+        </android.support.v4.widget.NestedScrollView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

@@ -2,9 +2,7 @@ package cn.zhaoshuhao.kotlinfirst.base
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import cn.zhaoshuhao.kotlinfirst.utils.LogType
 import cn.zhaoshuhao.kotlinfirst.utils.componet
 import cn.zhaoshuhao.kotlinfirst.utils.log
@@ -21,12 +19,19 @@ abstract class BaseFragment : Fragment() {
         retainInstance = true
     }
 
+//    override fun onResume() {
+//        super.onResume()
+//        if (activity is CheckoutToolbar)
+//            this.checkout(activity as CheckoutToolbar)
+//    }
+
     final override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(obtainLayoutID(), container, false)
     }
 
     final override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         initView(view, savedInstanceState)
     }
 
@@ -46,6 +51,17 @@ abstract class BaseFragment : Fragment() {
     }
 
     open fun onActivityComplete() {}
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        if (obtainMenuLayout() == 0) return
+        activity.menuInflater.inflate(obtainMenuLayout(), menu)
+        initMenuAction(menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    open fun initMenuAction(menu: Menu?) {}
+
+    open fun obtainMenuLayout() = 0
 
     /*
     * 保存数据，未避免多种情况的发生，需要对Framgnet的多种可能发生情况进行处理
@@ -111,4 +127,12 @@ abstract class BaseFragment : Fragment() {
     private fun onSaveState(savedInstanceState: Bundle) {
 
     }
+}
+
+interface CheckoutToolbar {
+    fun toTarget(fragment: Fragment)
+}
+
+fun Fragment.checkout(callback: CheckoutToolbar) {
+    callback.toTarget(this)
 }

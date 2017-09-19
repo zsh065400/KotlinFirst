@@ -27,10 +27,11 @@
         <item name="android:colorControlNormal">@android:color/white</item>
     </style>
 
-    <style name="ViewTheme.Arrow"
+    <style name="ViewTheme.Default"
            parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@android:color/darker_gray</item>
         <item name="android:colorControlNormal">@android:color/darker_gray</item>
+        <item name="android:textColorSecondary">@android:color/darker_gray</item>
     </style>
 
     <!--设置Toolbar标题距离左侧按键的距离-->
@@ -62,4 +63,9 @@
         <item name="android:background">#d9d9d9</item>
     </style>
 
+    <style name="MyCheckBox"
+           parent="@android:style/Widget.Material.CompoundButton.CheckBox">
+        <item name="android:colorControlActivated">@color/colorAccent</item>
+        <item name="android:colorControlNormal">@android:color/darker_gray</item>
+    </style>
 </resources>

@@ -1,57 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group
-        android:checkableBehavior="single"
-        android:orderInCategory="0">
-        <item
-            android:id="@+id/id_menu_clear"
-            android:checkable="false"
-            android:title="清除缓存">
-        </item>
+    <item android:title="系统设置">
+        <menu>
+            <item
+                android:id="@+id/id_menu_clear"
+                android:checkable="false"
+                android:title="清除缓存">
+            </item>
 
-        <item
-            android:id="@+id/id_menu_replace"
-            android:checkable="false"
-            android:title="换肤">
-        </item>
+            <item
+                android:id="@+id/id_menu_replace"
+                android:checkable="false"
+                android:title="换肤">
+            </item>
 
-        <item
-            android:id="@+id/id_menu_iswifi"
-            android:checkable="false"
-            android:title="检查更新">
-        </item>
+            <item
+                android:id="@+id/id_menu_iswifi"
+                android:checkable="false"
+                android:title="检查更新">
+            </item>
 
-        <item
-            android:id="@+id/id_menu_more"
-            android:checkable="false"
-            android:title="更多设置">
-        </item>
-    </group>
+            <item
+                android:id="@+id/id_menu_more"
+                android:checkable="false"
+                android:title="更多设置">
+            </item>
+        </menu>
+    </item>
 
-    <group
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/id_menu_good"
-            android:checkable="false"
-            android:title="赏个好评">
-        </item>
+    <item android:title="让我进步">
+        <menu>
+            <item
+                android:id="@+id/id_menu_good"
+                android:checkable="false"
+                android:title="赏个好评">
+            </item>
 
-        <item
-            android:id="@+id/id_menu_feedback"
-            android:checkable="false"
-            android:title="意见反馈">
-        </item>
+            <item
+                android:id="@+id/id_menu_feedback"
+                android:checkable="false"
+                android:title="意见反馈">
+            </item>
 
-        <item
-            android:id="@+id/id_menu_contact"
-            android:checkable="false"
-            android:title="联系客服">
-        </item>
+            <item
+                android:id="@+id/id_menu_contact"
+                android:checkable="false"
+                android:title="联系客服">
+            </item>
 
-        <item
-            android:id="@+id/id_menu_about"
-            android:checkable="false"
-            android:title="关于软件">
-        </item>
-    </group>
+            <item
+                android:id="@+id/id_menu_about"
+                android:checkable="false"
+                android:title="关于软件">
+            </item>
+        </menu>
+    </item>
 </menu>

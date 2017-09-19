@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/id_cart_refresh"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/id_cart_rv_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="114dp">
+
+            </android.support.v7.widget.RecyclerView>
+        </android.support.v4.widget.NestedScrollView>
+
+        <RelativeLayout
+            android:background="@color/white"
+            android:id="@+id/id_cart_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="56dp">
+
+            <CheckBox
+                android:id="@+id/id_cart_rb_all"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="全选"
+                android:textSize="20dp"
+                android:theme="@style/MyCheckBox"/>
+
+            <Button
+                android:id="@+id/id_cart_btn_buy"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignBaseline="@+id/id_cart_tv_final_price"
+                android:layout_alignBottom="@+id/id_cart_tv_final_price"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/btn_click"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:text="购买"
+                android:textColor="@color/white"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/id_cart_tv_final_price"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/id_cart_btn_buy"
+                android:gravity="center"
+                android:text="￥0.0"
+                android:textColor="@color/colorPrimary"
+                android:textSize="22dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/id_cart_tv_final_price"
+                android:gravity="center"
+                android:text="合计："
+                android:textColor="@android:color/black"
+                android:textSize="22dp"/>
+
+        </RelativeLayout>
+    </FrameLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

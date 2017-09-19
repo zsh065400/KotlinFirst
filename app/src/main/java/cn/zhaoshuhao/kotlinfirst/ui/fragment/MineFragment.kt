@@ -20,11 +20,6 @@ class MineFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        id_tv_blank.text = "我的"
-    }
-
-    override fun onResume() {
-        super.onResume()
-        checkout(activity as CheckoutToolbar)
+        id_tv_blank.text = "更多"
     }
 }

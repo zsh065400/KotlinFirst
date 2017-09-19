@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -19,13 +18,17 @@ import android.text.TextUtils
 import android.view.Gravity
 import android.view.Menu
 import cn.zhaoshuhao.kotlinfirst.R
-import cn.zhaoshuhao.kotlinfirst.base.BaseActivity
-import cn.zhaoshuhao.kotlinfirst.base.startActivity
-import cn.zhaoshuhao.kotlinfirst.base.toast
+import cn.zhaoshuhao.kotlinfirst.base.*
 import cn.zhaoshuhao.kotlinfirst.contract.AroundPresent
+import cn.zhaoshuhao.kotlinfirst.contract.CartPresent
 import cn.zhaoshuhao.kotlinfirst.contract.MainPresent
-import cn.zhaoshuhao.kotlinfirst.fragment.*
+import cn.zhaoshuhao.kotlinfirst.fragment.ARoundFragment
+import cn.zhaoshuhao.kotlinfirst.fragment.CartFragment
+import cn.zhaoshuhao.kotlinfirst.fragment.MainFragment
+import cn.zhaoshuhao.kotlinfirst.fragment.MineFragment
+import cn.zhaoshuhao.kotlinfirst.model.bean.WebViewInfo
 import cn.zhaoshuhao.kotlinfirst.model.db.KDbHelper
+import cn.zhaoshuhao.kotlinfirst.model.db.KSearchDao
 import cn.zhaoshuhao.kotlinfirst.utils.KPermission
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
@@ -38,7 +41,7 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 
 
 class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
-    private val mTabText = arrayOf("主页", "周边", "已购", "我的")
+    private val mTabText = arrayOf("主页", "周边", "购物车", "我的")
     private var mHomeTabText = mTabText[0]
 
     private val mTabIcon = arrayOf(R.drawable.ic_tab_artists, R.drawable.ic_tab_albums,
@@ -55,8 +58,13 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
         aroundFragment.setPresent(aroundPresent)
         aroundPresent.setView(aroundFragment)
 
+        val cartFragment = CartFragment()
+        val cartPresent = CartPresent(this)
+        cartFragment.setPresent(cartPresent)
+        cartPresent.setView(cartFragment)
+
         arrayOf(mainFragment, aroundFragment,
-                MineFragment(), MoreFragment())
+                cartFragment, MineFragment())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,8 +118,14 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
                     true
                 }
                 R.id.id_main_map -> {
-                    //TODO 点击地图按钮进行相应操作
-                    false
+                    val bundle = Bundle()
+                    bundle.putSerializable("webinfo", WebViewInfo("高德地图", "http://m.amap.com"))
+                    startActivity<WebViewActivity>(bundle)
+                    true
+                }
+                R.id.id_main_delete -> {
+                    (mTabTarget[2] as CartFragment).onRemoveData()
+                    true
                 }
                 else -> false
             }
@@ -182,8 +196,6 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
         }
     }
 
-    var mCurIndex = 0
-
     private fun initBottomNavigationBar() = with(id_main_bottom_navigation) {
         setMode(BottomNavigationBar.MODE_SHIFTING)
         setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
@@ -194,7 +206,9 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
         setFirstSelectedPosition(0)
 //            selectTab(0)
         setTabSelectedListener(object : BottomNavigationBar.OnTabSelectedListener {
-            override fun onTabReselected(position: Int) {}
+            override fun onTabReselected(position: Int) {
+                logd("tab reselected -----> $position")
+            }
 
             override fun onTabUnselected(position: Int) {
                 logd("tab unselected -----> $position")
@@ -203,25 +217,33 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
 
             override fun onTabSelected(position: Int) {
                 logd("tab selected -----> $position")
-                if (mCurIndex == position) return
-                mCurIndex = position
-                supportFragmentManager.beginTransaction().show(mTabTarget[mCurIndex]).commit()
-                mTabTarget[mCurIndex].checkout(this@MainActivity)
+                mCurrentPage = position
+                supportFragmentManager.beginTransaction().show(mTabTarget[mCurrentPage]).commit()
+                mTabTarget[mCurrentPage].checkout(this@MainActivity)
             }
         })
     }
 
     private fun initFragmentUI() {
-        mCurIndex = 0
+        mCurrentPage = 0
         with(supportFragmentManager.beginTransaction()) {
+            (0..3)
+                    .mapNotNull { supportFragmentManager.findFragmentByTag("id$it") }
+                    .forEach { remove(it) }
             for (i in 0..3) {
                 add(R.id.id_main_fragment_content, mTabTarget[3 - i], "id$i")
                 hide(mTabTarget[3 - i])
             }
-            show(mTabTarget[0])
+            show(mTabTarget[mCurrentPage])
+            mTabTarget[mCurrentPage].checkout(this@MainActivity)
             commit()
-            mTabTarget[0].checkout(this@MainActivity)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        logd("currentPage-----> $mCurrentPage")
+        mTabTarget[mCurrentPage].checkout(this@MainActivity)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
@@ -231,30 +253,40 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
                 menu?.findItem(R.id.id_main_scan)?.isVisible = true
                 menu?.findItem(R.id.id_main_location)?.isVisible = true
                 menu?.findItem(R.id.id_main_map)?.isVisible = false
+                menu?.findItem(R.id.id_main_delete)?.isVisible = false
             }
             1 -> {
                 menu?.findItem(R.id.id_main_search)?.isVisible = false
                 menu?.findItem(R.id.id_main_scan)?.isVisible = false
                 menu?.findItem(R.id.id_main_location)?.isVisible = false
                 menu?.findItem(R.id.id_main_map)?.isVisible = true
+                menu?.findItem(R.id.id_main_delete)?.isVisible = false
+            }
+            2 -> {
+                menu?.findItem(R.id.id_main_search)?.isVisible = false
+                menu?.findItem(R.id.id_main_scan)?.isVisible = false
+                menu?.findItem(R.id.id_main_location)?.isVisible = false
+                menu?.findItem(R.id.id_main_map)?.isVisible = false
+                menu?.findItem(R.id.id_main_delete)?.isVisible = true
             }
             else -> {
                 menu?.findItem(R.id.id_main_search)?.isVisible = false
                 menu?.findItem(R.id.id_main_scan)?.isVisible = false
                 menu?.findItem(R.id.id_main_location)?.isVisible = false
                 menu?.findItem(R.id.id_main_map)?.isVisible = false
+                menu?.findItem(R.id.id_main_delete)?.isVisible = false
             }
         }
-        return super.onPrepareOptionsMenu(menu)
+        return true
     }
 
     override fun obtainMenuRes(): Int {
         return R.menu.main_activity_toolbar
     }
 
-    private val database: SQLiteDatabase
+    private val searchDao: KSearchDao
         get() {
-            return mHelper?.readableDatabase!!
+            return KSearchDao.get(this)
         }
 
     override fun initMenuAction(menu: Menu?) {
@@ -268,7 +300,13 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
         searchTv.setHintTextColor(Color.WHITE)
         searchTv.threshold = 1 //设置1个字符便可匹配
 
-        val readableDatabase = database
+//        searchDao.insert(Pair("origin", "film"), Pair("data", "陆垚知马俐"),
+//                Pair("origin", "film"), Pair("data", "快手枪手快枪手"),
+//                Pair("origin", "film"), Pair("data", "惊天大逆转"),
+//                Pair("origin", "film"), Pair("data", "大鱼海棠"),
+//                Pair("origin", "film"), Pair("data", "寒战2"),
+//                Pair("origin", "film"), Pair("data", "忍者神龟2"))
+
         var cursor: Cursor? = null
 
         searchView.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
@@ -292,7 +330,7 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 logd("text change : ${newText ?: "empty"}")
                 if (!TextUtils.isEmpty(newText)) {
-                    cursor = readableDatabase.query(mHelper!!.table_search, null, "data like ?", arrayOf("%$newText%"), null, null, null)
+                    cursor = searchDao.queryForLike(if (newText?.isEmpty()!!) "" else newText)
                     if (searchView.suggestionsAdapter == null) {
                         val adapter = SimpleCursorAdapter(this@MainActivity, android.R.layout.simple_list_item_1, cursor, arrayOf("data"), intArrayOf(android.R.id.text1))
                         searchView.suggestionsAdapter = adapter
@@ -305,6 +343,7 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CityListSelectActivity.CITY_SELECT_RESULT_FRAG) {
             if (resultCode == Activity.RESULT_OK) {
                 val cityInfoBean: CityInfoBean = data?.extras?.getParcelable<CityInfoBean>("cityinfo")!!
@@ -312,21 +351,26 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
                 refreshToolbarTitle(mHomeTabText)
             }
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
+
+    private var lastTime = 0L
 
     override fun onBackPressed() {
         if (id_main_drawer.isDrawerOpen(Gravity.START)) {
             id_main_drawer.closeDrawer(Gravity.START)
             return
         }
-        finish()
-        super.onBackPressed()
+        val currentTimeMillis = System.currentTimeMillis()
+        if (currentTimeMillis - lastTime < 2000) {
+            finish()
+        } else {
+            lastTime = currentTimeMillis
+            toast("再按一次退出")
+        }
     }
 
     override fun onDestroy() {
-        if (database.isOpen)
-            database.close()
+        searchDao.onDestroy()
         super.onDestroy()
     }
 
@@ -340,8 +384,8 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
                 return
             }
             is ARoundFragment -> mCurrentPage = 1
-            is MineFragment -> mCurrentPage = 2
-            is MoreFragment -> mCurrentPage = 3
+            is CartFragment -> mCurrentPage = 2
+            is MineFragment -> mCurrentPage = 3
         }
         refreshToolbarTitle(mTabText[mCurrentPage])
     }
@@ -349,6 +393,7 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
     private fun refreshToolbarTitle(title: String) {
         supportActionBar?.title = title
         invalidateOptionsMenu()
+        logd("应显示的标题和序号 title:$title, page:$mCurrentPage")
     }
 
     private var isRefreshing = false
@@ -361,7 +406,7 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
 
     override fun refreshComplete() {
         id_main_bottom_navigation.show()
-        isRefreshing = true
+        isRefreshing = false
         logd("刷新结束")
     }
 

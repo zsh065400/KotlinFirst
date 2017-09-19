@@ -24,3 +24,13 @@ infix fun <P1, P2, R> Function1<P1, P2>.andThen(function: Function1<P2, R>) = fu
 //inline fun <T, R> Any?.withNonNull(receiver: T, block: T.() -> R): R? {
 //    return receiver?.block()
 //}
+
+fun String.s2n(): Double {
+    var result: Number
+    result = try {
+        this.toInt()
+    } catch (e: NumberFormatException) {
+        this.toDouble()
+    }
+    return result.toDouble()
+}

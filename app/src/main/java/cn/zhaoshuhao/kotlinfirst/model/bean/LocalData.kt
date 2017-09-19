@@ -8,6 +8,8 @@ import java.io.Serializable
  */
 data class TypeInfo(val text: String, val icon: Int)
 
-data class WebViewInfo(val title: String, val url: String) : Serializable {
+data class WebViewInfo(val title: String, val url: String) : Serializable
 
-}
+data class ShoppingCart(val id: String, val name: String, val img: String,
+                        val price: String, val value: String, var num: String,
+                        var checked: Boolean)

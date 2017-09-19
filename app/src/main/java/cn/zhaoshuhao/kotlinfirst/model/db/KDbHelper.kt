@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper
 class KDbHelper(context: Context) : SQLiteOpenHelper(context, "kotlin_o2o.db", null, 1) {
 
     val table_search = "search"
+    val table_cart = "cart"
 
     companion object {
         private var instance: KDbHelper? = null
@@ -25,10 +26,12 @@ class KDbHelper(context: Context) : SQLiteOpenHelper(context, "kotlin_o2o.db", n
 
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL("create table if not exists $table_search(_id integer primary key autoincrement not null, origin varchar, data varchar)")
+        db?.execSQL("create table if not exists $table_cart(_id integer primary key autoincrement not null,name varchar, json varchar)")
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
         db?.execSQL("drop table $table_search")
+        db?.execSQL("drop table $table_cart")
         onCreate(db)
     }
 }
