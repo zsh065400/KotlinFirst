@@ -46,45 +46,40 @@ class OrderActivity : BaseActivity() {
         id_order_btn_buy.setOnClickListener {
             with(id_order_btn_buy) {
                 isEnabled = false
-                if (text.toString().replace("￥", "").toFloat() == 0.0f) {
-                    toast("先去买些商品或者选中购物车的商品吧")
-                    isEnabled = true
-                } else {
-                    var orderId = ""
-                    BP.pay("天天爱生活", "这些是从仿拉手O2O购买的商品，此处仅为测试使用。多个商品状态下逻辑会有不同", 0.02, true, object : PListener {
-                        override fun fail(p0: Int, p1: String?) {
-                            isEnabled = true
-                            toast("支付失败：用户取消或异常退出$p0, $p1")
-                        }
+                var orderId = ""
+                BP.pay("天天爱生活", "这些是从仿拉手O2O购买的商品，此处仅为测试使用。多个商品状态下逻辑会有不同", 0.02, true, object : PListener {
+                    override fun fail(p0: Int, p1: String?) {
+                        isEnabled = true
+                        toast("支付失败：用户取消或异常退出$p0, $p1")
+                    }
 
-                        override fun unknow() {
-                            isEnabled = true
-                            toast("因网络等原因，请稍后查询支付结果")
-                        }
+                    override fun unknow() {
+                        isEnabled = true
+                        toast("因网络等原因，请稍后查询支付结果")
+                    }
 
-                        override fun succeed() {
-                            BP.query(orderId, object : QListener {
-                                override fun fail(p0: Int, p1: String?) {
-                                    //TODO 订单号在此处获得，支付失败，返回订单号和错误码
+                    override fun succeed() {
+                        BP.query(orderId, object : QListener {
+                            override fun fail(p0: Int, p1: String?) {
+                                //TODO 订单号在此处获得，支付失败，返回订单号和错误码
 
-                                }
+                            }
 
-                                override fun succeed(p0: String?) {
-                                    //TODO 订单号在此处获得，确认支付成功
-                                    //查询成功(并不是说支付成功),返回的status有NOTPAY和SUCCESS两种可能
-                                }
+                            override fun succeed(p0: String?) {
+                                //TODO 订单号在此处获得，确认支付成功
+                                //查询成功(并不是说支付成功),返回的status有NOTPAY和SUCCESS两种可能
+                            }
 
-                            })
-                            isEnabled = true
-                        }
+                        })
+                        isEnabled = true
+                    }
 
-                        override fun orderId(p0: String?) {
-                            //TODO 订单号在此处获得，用于我的页面订单处理，未付款和已付款
-                            orderId = p0 ?: ""
-                            isEnabled = true
-                        }
-                    })
-                }
+                    override fun orderId(p0: String?) {
+                        //TODO 订单号在此处获得，用于我的页面订单处理，未付款和已付款
+                        orderId = p0 ?: ""
+                        isEnabled = true
+                    }
+                })
             }
         }
     }
