@@ -40,7 +40,7 @@ class CartPresent(val context: Context) : ShoppingCart.Present {
         else {
             cartData!!.filter { it.checked }.forEachIndexed { index, shoppingCart ->
                 println(shoppingCart.toString())
-                cartDao.deleteForLike("name", shoppingCart.name)
+                cartDao.deleteForAbs("name", shoppingCart.name)
             }.let {
                 cartView.onRemoveComplete()
                 loadCartData()
@@ -51,7 +51,15 @@ class CartPresent(val context: Context) : ShoppingCart.Present {
     override fun updateCartData(id: Int, num: Int) {
     }
 
-    override fun doBuy() {
+    override fun doBuyAction() {
+        if (cartData != null && cartData!!.size > 0) {
+            val filter = cartData!!.filter { it.checked }.toArrayList()
+            val size = filter.size
+            if (size == 0) return
+            else {
+                cartView.commitOrder(filter)
+            }
+        }
     }
 
     override fun doCalcMoney() {
@@ -66,7 +74,7 @@ class CartPresent(val context: Context) : ShoppingCart.Present {
     override fun onStop() {
         cartData?.forEach {
             it.checked = false
-            cartDao.updateForLike("name", it.name, Pair("json", anyToJson(it)))
+            cartDao.updateForAbs("name", it.name, Pair("json", anyToJson(it)))
         }
     }
 
@@ -84,6 +92,8 @@ interface ShoppingCart {
         fun onRefreshComplete()
 
         fun onCalcDone(moeny: Double, isAllChecked: Boolean)
+
+        fun commitOrder(datas: ArrayList<CartData>)
     }
 
     interface Present : Base.Present<View> {
@@ -93,8 +103,8 @@ interface ShoppingCart {
 
         fun updateCartData(id: Int, num: Int)
 
-        fun doBuy()
-
         fun doCalcMoney()
+
+        fun doBuyAction()
     }
 }

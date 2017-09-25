@@ -12,7 +12,7 @@ import android.widget.Toast
 import cn.zhaoshuhao.kotlinfirst.R
 import cn.zhaoshuhao.kotlinfirst.adapter.*
 import cn.zhaoshuhao.kotlinfirst.base.BaseFragment
-import cn.zhaoshuhao.kotlinfirst.base.startActivity
+import cn.zhaoshuhao.kotlinfirst.base.toActivity
 import cn.zhaoshuhao.kotlinfirst.contract.Main
 import cn.zhaoshuhao.kotlinfirst.model.bean.TypeInfo
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Banner
@@ -131,7 +131,7 @@ class MainFragment : BaseFragment(), Main.View {
             override fun onClick(view: View, data: GuessYouLike, position: Int) {
                 val bundle = Bundle()
                 bundle.putSerializable("product", data)
-                activity.startActivity<ProductDetailActivity>(bundle)
+                activity.toActivity<ProductDetailActivity>(bundle)
             }
         })
     }

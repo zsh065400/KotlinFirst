@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import cn.zhaoshuhao.kotlinfirst.R
-import cn.zhaoshuhao.kotlinfirst.base.startActivity
+import cn.zhaoshuhao.kotlinfirst.base.toActivity
 import cn.zhaoshuhao.kotlinfirst.model.bean.WebViewInfo
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Banner
 import cn.zhaoshuhao.kotlinfirst.ui.activity.MainActivity
@@ -80,7 +80,7 @@ class BannerAdapter(context: Context, datas: ArrayList<Banner>) : BasePagerAdapt
                 val info = WebViewInfo(banner.title, banner.to_url)
                 val bundle = Bundle()
                 bundle.putSerializable("webinfo", info)
-                (context as MainActivity).startActivity<WebViewActivity>(bundle)
+                (context as MainActivity).toActivity<WebViewActivity>(bundle)
             }
             mViews.add(inflate)
         }

@@ -10,8 +10,10 @@ import cn.zhaoshuhao.kotlinfirst.R
 import cn.zhaoshuhao.kotlinfirst.adapter.BaseSupportAdapter
 import cn.zhaoshuhao.kotlinfirst.adapter.CartAdapter
 import cn.zhaoshuhao.kotlinfirst.base.BaseFragment
+import cn.zhaoshuhao.kotlinfirst.base.toActivity
 import cn.zhaoshuhao.kotlinfirst.contract.ShoppingCart
 import cn.zhaoshuhao.kotlinfirst.ui.activity.IRefreshListener
+import cn.zhaoshuhao.kotlinfirst.ui.activity.OrderActivity
 import cn.zhaoshuhao.kotlinfirst.utils.default
 import cn.zhaoshuhao.kotlinfirst.utils.dp2px
 import cn.zhaoshuhao.kotlinfirst.utils.vertical
@@ -93,6 +95,18 @@ class CartFragment : BaseFragment(), ShoppingCart.View {
                         .forEach { it.performClick() }
             }
         }
+
+        with(id_cart_btn_buy) {
+            setOnClickListener {
+                cartPresent.doBuyAction()
+            }
+        }
+    }
+
+    override fun commitOrder(datas: ArrayList<cn.zhaoshuhao.kotlinfirst.model.bean.ShoppingCart>) {
+        val bundle = Bundle()
+        bundle.putParcelableArrayList("products", datas)
+        activity.toActivity<OrderActivity>(bundle)
     }
 
     private fun initRefreshLayout() {

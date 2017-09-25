@@ -82,10 +82,10 @@ inline fun Activity.fullScreen() {
     window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 }
 
-inline fun <T> Activity.startActivity(other: Class<T>, bundle: Bundle) {
-    val target = Intent(this, other)
+inline fun <reified other : Context> Activity.toActivity(bundle: Bundle) {
+    val target = Intent(this, other::class.java)
     target.putExtras(bundle)
-//    startActivity(target)
+//    toActivity(target)
     //设置进入和退出动画
 //    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     val options = ActivityOptionsCompat.makeCustomAnimation(this,
@@ -93,10 +93,21 @@ inline fun <T> Activity.startActivity(other: Class<T>, bundle: Bundle) {
     ActivityCompat.startActivity(this, target, options.toBundle())
 }
 
-inline fun <reified T : Context> Activity.startActivity() {
-    startActivity(T::class.java, Bundle())
+inline fun <reified other : Context> Activity.toActivity() {
+    toActivity<other>(Bundle())
 }
 
-inline fun <reified T : Context> Activity.startActivity(bundle: Bundle) {
-    startActivity(T::class.java, bundle)
+inline fun <reified other : Context> Activity.toActivityForResult(requestCode: Int) {
+    toActivityForResult<other>(Bundle(), requestCode)
+}
+
+inline fun <reified other : Context> Activity.toActivityForResult(bundle: Bundle, requestCode: Int) {
+    val target = Intent(this, other::class.java)
+    target.putExtras(bundle)
+//    toActivity(target)
+    //设置进入和退出动画
+//    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+    val options = ActivityOptionsCompat.makeCustomAnimation(this,
+            R.anim.fade_in, R.anim.fade_out)
+    ActivityCompat.startActivityForResult(this, target, requestCode, options.toBundle())
 }

@@ -19,7 +19,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -48,6 +48,19 @@ dependencies {
     //    compile('com.github.hotchemi:permissionsdispatcher:2.4.0') { exclude module: 'support-v13' }
 
     //    kapt 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
+    compile project(':citypickerview')
+    compile "org.jetbrains.anko:anko:$anko_version"
+    compile files('libs/MobCommons-2017.0914.1125.jar')
+    compile files('libs/MobTools-2017.0914.1125.jar')
+    compile files('libs/ShareSDK-Core-3.1.0.jar')
+    compile files('libs/ShareSDK-QQ-3.1.0.jar')
+    compile files('libs/ShareSDK-QZone-3.1.0.jar')
+    compile files('libs/ShareSDK-SinaWeibo-3.1.0.jar')
+    compile files('libs/ShareSDK-Wechat-3.1.0.jar')
+    compile files('libs/ShareSDK-Wechat-Core-3.1.0.jar')
+    compile files('libs/ShareSDK-Wechat-Moments-3.1.0.jar')
+    compile files('libs/tbs_sdk_thirdapp_v3.1.0.1034_43100_sharewithdownload_obfs_20170301_182143.jar')
+    compile files('libs/BmobPay_v3.2.0_170602.jar')
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support:cardview-v7:26.+'
     compile 'com.android.support:recyclerview-v7:26.+'
@@ -70,18 +83,6 @@ dependencies {
     compile 'cn.bingoogolapple:bga-zbar:1.1.7@aar'
     compile 'com.amap.api:location:latest.integration'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
-    compile project(':citypickerview')
-    compile "org.jetbrains.anko:anko:$anko_version"
-    compile files('libs/MobCommons-2017.0914.1125.jar')
-    compile files('libs/MobTools-2017.0914.1125.jar')
-    compile files('libs/ShareSDK-Core-3.1.0.jar')
-    compile files('libs/ShareSDK-QQ-3.1.0.jar')
-    compile files('libs/ShareSDK-QZone-3.1.0.jar')
-    compile files('libs/ShareSDK-SinaWeibo-3.1.0.jar')
-    compile files('libs/ShareSDK-Wechat-3.1.0.jar')
-    compile files('libs/ShareSDK-Wechat-Core-3.1.0.jar')
-    compile files('libs/ShareSDK-Wechat-Moments-3.1.0.jar')
-    compile files('libs/tbs_sdk_thirdapp_v3.1.0.1034_43100_sharewithdownload_obfs_20170301_182143.jar')
 }
 //apply plugin: 'kotlin-kapt'
 

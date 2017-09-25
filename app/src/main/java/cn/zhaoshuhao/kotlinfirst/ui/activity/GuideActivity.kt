@@ -8,7 +8,7 @@ import cn.zhaoshuhao.kotlinfirst.R
 import cn.zhaoshuhao.kotlinfirst.adapter.GuideAdapter
 import cn.zhaoshuhao.kotlinfirst.base.BaseActivity
 import cn.zhaoshuhao.kotlinfirst.base.fullScreen
-import cn.zhaoshuhao.kotlinfirst.base.startActivity
+import cn.zhaoshuhao.kotlinfirst.base.toActivity
 import kotlinx.android.synthetic.main.activity_guide.*
 
 class GuideActivity : BaseActivity() {
@@ -47,7 +47,7 @@ class GuideActivity : BaseActivity() {
             override fun onPageScrollStateChanged(state: Int) {}
         })
 
-        id_btn_start.setOnClickListener { startActivity<MainActivity>();finish() }
+        id_btn_start.setOnClickListener { toActivity<MainActivity>();finish() }
     }
 
     override fun obtainLayoutID(): Int = R.layout.activity_guide

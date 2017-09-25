@@ -11,6 +11,7 @@ import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.TextView
 import cn.zhaoshuhao.kotlinfirst.R
+import cn.zhaoshuhao.kotlinfirst.model.bean.Address
 import cn.zhaoshuhao.kotlinfirst.model.bean.ShoppingCart
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Around
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Film
@@ -25,6 +26,48 @@ import com.bumptech.glide.Glide
  * Created by Scout
  * Created on 2017/8/1 21:49.
  */
+class AddressAdapter(context: Context, datas: ArrayList<Address>, listener: BaseSupportAdapter.OnItemClickListener<Address>?) : BaseSupportAdapter<Address>(context, datas, listener) {
+
+    override fun onCreateViewWithId(): Int = R.layout.item_address
+
+    override fun onBindViewHolder(holder: SupportViewHolder?, position: Int) {
+        if (holder != null) {
+            with(holder) {
+                val addr = datas[position]
+                val person = findView<TextView>(R.id.id_address_tv_person)
+                val phone = findView<TextView>(R.id.id_address_tv_phone)
+                val address = findView<TextView>(R.id.id_address_tv_address)
+
+                person.text = "收货人：${addr.name}"
+                phone.text = addr.phone
+                address.text = "地址：${addr.part.trim()}${addr.detail.trim()}"
+            }
+        }
+    }
+
+}
+
+class OrderAdapter(context: Context, datas: ArrayList<ShoppingCart>, listener: BaseSupportAdapter.OnItemClickListener<ShoppingCart>?) : BaseSupportAdapter<ShoppingCart>(context, datas, listener) {
+    override fun onCreateViewWithId(): Int = R.layout.item_order_product
+
+    override fun onBindViewHolder(holder: SupportViewHolder?, position: Int) {
+        if (holder != null) {
+            with(holder) {
+                val cart = datas[position]
+                val icon = findView<ImageView>(R.id.id_order_iv_icon)
+                val name = findView<TextView>(R.id.id_order_tv_name)
+                val price = findView<TextView>(R.id.id_order_tv_price)
+                val num = findView<TextView>(R.id.id_order_tv_num)
+
+                icon.load(context, cart.img)
+                name.text = cart.name
+                price.text = cart.price
+                num.text = "x${cart.num}"
+            }
+        }
+    }
+}
+
 class CartAdapter(context: Context, datas: ArrayList<ShoppingCart>, listener: BaseSupportAdapter.OnItemClickListener<ShoppingCart>?) : BaseSupportAdapter<ShoppingCart>(context, datas, listener) {
 
     override fun onCreateViewWithId(): Int = R.layout.item_cart
@@ -56,12 +99,6 @@ class CartAdapter(context: Context, datas: ArrayList<ShoppingCart>, listener: Ba
                 value.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG
                 num.value = cart.num.toInt()
             }
-    }
-
-    fun reset(newDatas: List<ShoppingCart>) {
-        datas.clear()
-        datas.addAll(newDatas)
-        this.notifyDataSetChanged()
     }
 
     private var checkedChange: ((CompoundButton, Boolean, ShoppingCart) -> Unit)? = null
@@ -97,13 +134,6 @@ class AroundInfoAdapter(context: Context, datas: ArrayList<Around>, listener: Ba
                 origin.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG
                 delivery.text = "配送费：${around.delivery.toString()}"
             }
-    }
-
-    fun reset(new: List<Around>) {
-        datas.clear()
-        datas.addAll(new)
-//        notifyItemRangeChanged(0, datas.size)
-        this.notifyDataSetChanged()
     }
 }
 
@@ -164,11 +194,21 @@ abstract class BaseSupportAdapter<T>(val context: Context, val datas: ArrayList<
 
     override fun getItemCount(): Int = datas.size
 
-    inner class SupportViewHolder(private val root: View) : RecyclerView.ViewHolder(root) {
+    open fun reset(newDatas: List<T>) {
+        datas.clear()
+        datas.addAll(newDatas)
+        this.notifyDataSetChanged()
+    }
+
+    inner class SupportViewHolder(val root: View) : RecyclerView.ViewHolder(root) {
         init {
             if (listener != null) root.setOnClickListener {
                 listener?.
                         onClick(root, datas[layoutPosition], layoutPosition)
+            }
+            if (longListener != null) root.setOnLongClickListener {
+                longListener?.onLongClick(root, datas[layoutPosition], layoutPosition)
+                true
             }
         }
 
@@ -179,8 +219,17 @@ abstract class BaseSupportAdapter<T>(val context: Context, val datas: ArrayList<
         this.listener = listener
     }
 
-    interface OnItemClickListener<T> {
+    var longListener: OnItemLongClickListener<T>? = null
 
+    fun setOnItmeLongClickListener(listener: OnItemLongClickListener<T>) {
+        this.longListener = listener
+    }
+
+    interface OnItemClickListener<T> {
         fun onClick(view: View, data: T, position: Int)
+    }
+
+    interface OnItemLongClickListener<T> {
+        fun onLongClick(view: View, data: T, position: Int)
     }
 }
