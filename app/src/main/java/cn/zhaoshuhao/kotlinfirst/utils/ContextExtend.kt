@@ -82,11 +82,15 @@ fun Context.obtainNetStatus(): Boolean {
     return connService?.activeNetworkInfo == null || connService?.activeNetworkInfo.isAvailable
 }
 
-inline fun <reified T> Cursor.toList(): ArrayList<T> {
+/**
+ *
+ * @param columns 此参数用来指定被解析的列的内容
+ * */
+inline fun <reified T> Cursor.toList(columns: Int = 2): ArrayList<T> {
     val datas = arrayListOf<T>()
     if (this != null && this.count != 0) {
         while (this.moveToNext()) {
-            val json = this.getString(this.getColumnIndex(this.getColumnName(2)))
+            val json = this.getString(this.getColumnIndex(this.getColumnName(columns)))
             val t = Gson().fromJson(json, T::class.java)
             datas.add(t)
         }

@@ -7,7 +7,7 @@ import android.view.MenuItem
 import cn.sharesdk.onekeyshare.OnekeyShare
 import cn.zhaoshuhao.kotlinfirst.R
 import cn.zhaoshuhao.kotlinfirst.base.BaseActivity
-import cn.zhaoshuhao.kotlinfirst.base.startActivity
+import cn.zhaoshuhao.kotlinfirst.base.toActivity
 import cn.zhaoshuhao.kotlinfirst.base.toast
 import cn.zhaoshuhao.kotlinfirst.contract.Detail
 import cn.zhaoshuhao.kotlinfirst.contract.DetailPresent
@@ -59,12 +59,12 @@ class ProductDetailActivity : BaseActivity(), Detail.View {
         id_detail_fab_buy.setOnClickListener {
             if (cartData != null) {
                 cartData!!.num = (cartData!!.num.toInt() + 1).toString()
-                cartDao.updateForLike("name", product.product, Pair("json", anyToJson(cartData!!)))
+                cartDao.updateForAbs("name", product.product, Pair("json", anyToJson(cartData!!)))
                 toast("成功添加到购物车")
                 logd(cartData.toString())
                 return@setOnClickListener
             } else {
-                val cursor = cartDao.queryForLike("name", product.product)
+                val cursor = cartDao.queryForAbs("name", product.product)
                 if (cursor == null || cursor.count == 0) {
                     cartData = ShoppingCart(product.goods_id, product.product,
                             product.images[0].image, product.price,
@@ -75,7 +75,7 @@ class ProductDetailActivity : BaseActivity(), Detail.View {
                     val json = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(2)))
                     cartData = jsonToAny(json)
                     cartData!!.num = (cartData!!.num.toInt() + 1).toString()
-                    cartDao.updateForLike("name", product.product, Pair("json", anyToJson(cartData!!)))
+                    cartDao.updateForAbs("name", product.product, Pair("json", anyToJson(cartData!!)))
                     logd(cartData.toString())
                     cursor?.close()
                 }
@@ -147,7 +147,7 @@ class ProductDetailActivity : BaseActivity(), Detail.View {
         id_detail_iv_image.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable("images", result)
-            startActivity<ImageGalleryActivity>(bundle)
+            toActivity<ImageGalleryActivity>(bundle)
         }
         id_detail_tv_title.text = product.title ?: result.title
         id_detail_tv_bought.text = "已售${product.bought.toString()}份"

@@ -2,10 +2,9 @@
 <manifest package="cn.zhaoshuhao.kotlinfirst"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--Mob-->
+    <!-- Mob -->
     <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
@@ -37,6 +36,7 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
 
     <application
+        android:name=".app.ScoutApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -87,7 +87,7 @@
         <activity android:name=".ui.activity.CityChoiceActivity">
         </activity>
 
-        <!--Mob分享Activity-->
+        <!-- Mob分享Activity -->
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -97,6 +97,7 @@
             <!-- 调用新浪原生SDK，需要注册的回调activity -->
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
@@ -108,7 +109,7 @@
             android:name="Mob-AppSecret"
             android:value="adc829e311c60c0ca04913333cc8e5b4"/>
 
-        <!--腾讯回调-->
+        <!-- 腾讯回调 -->
         <activity
             android:name="cn.sharesdk.tencent.qq.ReceiveActivity"
             android:launchMode="singleTask"
@@ -123,13 +124,22 @@
             </intent-filter>
         </activity>
 
-        <!--微信回调-->
+        <!-- 微信回调 -->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name=".ui.activity.OrderActivity">
+        </activity>
+        <activity android:name=".ui.activity.AddressActivity">
+        </activity>
+        <activity android:name=".ui.activity.AddressEditActivity">
+        </activity>
+
+        <!--Bmob支付-->
+        <activity android:name="cn.bmob.pay.v3.act.PayAct"/>
     </application>
 
 </manifest>

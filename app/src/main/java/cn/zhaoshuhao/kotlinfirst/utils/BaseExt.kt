@@ -34,3 +34,12 @@ fun String.s2n(): Double {
     }
     return result.toDouble()
 }
+
+fun <T> List<T>.toArrayList(): ArrayList<T> {
+    if (this == null || this.isEmpty()) return arrayListOf()
+    val arrayList = arrayListOf<T>()
+    this.forEach {
+        arrayList.add(it)
+    }
+    return arrayList
+}

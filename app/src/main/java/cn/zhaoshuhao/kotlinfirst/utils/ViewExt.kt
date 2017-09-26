@@ -52,6 +52,16 @@ fun AppCompatActivity.defaultToolbarOptions(toolbar: Toolbar, title: String, nav
     }
 }
 
+fun AppCompatActivity.defaultToolbarOptions(toolbar: Toolbar, title: String, navigation: (View)-> Unit) {
+    with(toolbar) {
+        this.title = title
+        setSupportActionBar(toolbar)
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setNavigationOnClickListener(navigation)
+    }
+}
+
 fun ImageView.load(context: Context, imageUrl: String) = with(Glide.with(context)) {
     load(imageUrl).apply(obtainDefault()).into(this@load)
 }

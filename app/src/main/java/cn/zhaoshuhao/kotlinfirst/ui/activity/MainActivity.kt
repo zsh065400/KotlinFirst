@@ -30,6 +30,7 @@ import cn.zhaoshuhao.kotlinfirst.model.bean.WebViewInfo
 import cn.zhaoshuhao.kotlinfirst.model.db.KDbHelper
 import cn.zhaoshuhao.kotlinfirst.model.db.KSearchDao
 import cn.zhaoshuhao.kotlinfirst.utils.KPermission
+import cn.zhaoshuhao.kotlinfirst.utils.SPExt
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
@@ -42,7 +43,7 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 
 class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
     private val mTabText = arrayOf("主页", "周边", "购物车", "我的")
-    private var mHomeTabText = mTabText[0]
+    private var mHomeTabText by SPExt.SpDelegate(this, "location_city", mTabText[0])
 
     private val mTabIcon = arrayOf(R.drawable.ic_tab_artists, R.drawable.ic_tab_albums,
             R.drawable.ic_tab_cart, R.drawable.ic_tab_songs)
@@ -108,7 +109,7 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
                     KPermission.requestOfLambda(Manifest.permission.CAMERA, activity = this@MainActivity) { g, d, n ->
                         when {
                             g.isNotEmpty() -> {
-                                startActivity<ScanActivity>()
+                                toActivity<ScanActivity>()
                                 logd("授权成功")
                             }
                             d.isNotEmpty() -> showTipDialog()
@@ -120,7 +121,7 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
                 R.id.id_main_map -> {
                     val bundle = Bundle()
                     bundle.putSerializable("webinfo", WebViewInfo("高德地图", "http://m.amap.com"))
-                    startActivity<WebViewActivity>(bundle)
+                    toActivity<WebViewActivity>(bundle)
                     true
                 }
                 R.id.id_main_delete -> {
@@ -300,15 +301,17 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
         searchTv.setHintTextColor(Color.WHITE)
         searchTv.threshold = 1 //设置1个字符便可匹配
 
-//        searchDao.insert(Pair("origin", "film"), Pair("data", "陆垚知马俐"),
-//                Pair("origin", "film"), Pair("data", "快手枪手快枪手"),
-//                Pair("origin", "film"), Pair("data", "惊天大逆转"),
-//                Pair("origin", "film"), Pair("data", "大鱼海棠"),
-//                Pair("origin", "film"), Pair("data", "寒战2"),
-//                Pair("origin", "film"), Pair("data", "忍者神龟2"))
+        val like = searchDao.queryForLike("origin", "film")
+        if (like != null && like.count == 0) {
+            searchDao.insert(Pair("origin", "film"), Pair("data", "陆垚知马俐"),
+                    Pair("origin", "film"), Pair("data", "快手枪手快枪手"),
+                    Pair("origin", "film"), Pair("data", "惊天大逆转"),
+                    Pair("origin", "film"), Pair("data", "大鱼海棠"),
+                    Pair("origin", "film"), Pair("data", "寒战2"),
+                    Pair("origin", "film"), Pair("data", "忍者神龟2"))
+        }
 
         var cursor: Cursor? = null
-
         searchView.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
             override fun onSuggestionSelect(position: Int): Boolean {
                 return true
