@@ -3,7 +3,9 @@ package cn.zhaoshuhao.kotlinfirst.ui.activity
 import android.Manifest
 import android.os.Bundle
 import android.os.Handler
+import cn.bmob.v3.Bmob
 import cn.zhaoshuhao.kotlinfirst.R
+import cn.zhaoshuhao.kotlinfirst.app.BMOB_ID
 import cn.zhaoshuhao.kotlinfirst.base.BaseActivity
 import cn.zhaoshuhao.kotlinfirst.base.toActivity
 import cn.zhaoshuhao.kotlinfirst.base.toast
@@ -17,7 +19,7 @@ class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Bmob.initialize(this, BMOB_ID)
         KPermission.requestOfLambda(Manifest.permission.READ_PHONE_STATE, activity = this) { g, d, n ->
             mHandler.postDelayed({
                 if (mIsFirst) {

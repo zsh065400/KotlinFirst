@@ -2,14 +2,25 @@ package cn.zhaoshuhao.kotlinfirst.model.bean
 
 import android.os.Parcel
 import android.os.Parcelable
+import cn.zhaoshuhao.kotlinfirst.utils.anyToJson
 import java.io.Serializable
 
 /**
  * Created by Scout
  * Created on 2017/8/12 16:14.
  */
-class Address(val UUID: String, val name: String, val phone: String, val part: String, val detail: String) : Parcelable {
+data class History(val imgUrl: String,
+                   val title: String,
+                   val price: String,
+                   val url: String) : Serializable{
+    override fun toString(): String {
+        return anyToJson(this)
+    }
+}
+
+data class Address(val UUID: String, val name: String, val phone: String, var part: String, val detail: String, var default: String = "false") : Parcelable {
     constructor(source: Parcel) : this(
+            source.readString(),
             source.readString(),
             source.readString(),
             source.readString(),
@@ -25,6 +36,7 @@ class Address(val UUID: String, val name: String, val phone: String, val part: S
         writeString(phone)
         writeString(part)
         writeString(detail)
+        writeString(default)
     }
 
     companion object {
@@ -40,9 +52,9 @@ data class TypeInfo(val text: String, val icon: Int)
 
 data class WebViewInfo(val title: String, val url: String) : Serializable
 
-class ShoppingCart(val id: String, val name: String, val img: String,
-                   val price: String, val value: String, var num: String,
-                   var checked: Boolean) : Parcelable {
+data class ShoppingCart(val id: String, val name: String, val img: String,
+                        val price: String, val value: String, var num: String,
+                        var checked: Boolean) : Parcelable {
     constructor(source: Parcel) : this(
             source.readString(),
             source.readString(),

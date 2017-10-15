@@ -2,6 +2,8 @@
 <manifest package="cn.zhaoshuhao.kotlinfirst"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+
     <!-- Mob -->
     <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
@@ -84,7 +86,7 @@
 
         <service android:name="com.amap.api.location.APSService"/>
 
-        <activity android:name=".ui.activity.CityChoiceActivity">
+        <activity android:name=".ui.activity.LoginActivity">
         </activity>
 
         <!-- Mob分享Activity -->
@@ -138,8 +140,14 @@
         <activity android:name=".ui.activity.AddressEditActivity">
         </activity>
 
-        <!--Bmob支付-->
+        <!-- Bmob支付 -->
         <activity android:name="cn.bmob.pay.v3.act.PayAct"/>
+        <activity android:name=".ui.activity.HistoryActivity">
+        </activity>
+        <activity android:name=".ui.activity.StarActivity">
+        </activity>
+        <activity android:name=".ui.activity.OrderDetailActivity">
+        </activity>
     </application>
 
 </manifest>

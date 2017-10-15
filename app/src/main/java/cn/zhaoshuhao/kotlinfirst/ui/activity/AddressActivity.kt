@@ -12,6 +12,7 @@ import cn.zhaoshuhao.kotlinfirst.base.BaseActivity
 import cn.zhaoshuhao.kotlinfirst.base.toActivityForResult
 import cn.zhaoshuhao.kotlinfirst.model.bean.Address
 import cn.zhaoshuhao.kotlinfirst.model.db.KAddressDao
+import cn.zhaoshuhao.kotlinfirst.utils.anyToJson
 import cn.zhaoshuhao.kotlinfirst.utils.defaultToolbarOptions
 import cn.zhaoshuhao.kotlinfirst.utils.toList
 import cn.zhaoshuhao.kotlinfirst.utils.vertical
@@ -33,10 +34,9 @@ class AddressActivity : BaseActivity() {
     }
 
     private fun refreshDatas() {
-        if (adapter == null) {
-            datas = addrDao.queryAll()?.toList<Address>()
-        } else {
-            datas = addrDao.queryAll()?.toList<Address>()
+        datas = addrDao.queryAll()?.toList<Address>()
+        datas.sortBy { it.default == "false" }
+        if (adapter != null) {
             adapter?.reset(datas)
         }
     }
@@ -73,7 +73,7 @@ class AddressActivity : BaseActivity() {
                 override fun onLongClick(view: View, data: Address, position: Int) {
                     val alert = alert {}
                     alert.title = "请选择"
-                    alert.items(listOf("编辑", "删除")) { dialog, index ->
+                    alert.items(listOf("编辑", "删除", "设为默认")) { dialog, index ->
                         when (index) {
                             0 -> {
                                 val bundle = Bundle()
@@ -83,6 +83,9 @@ class AddressActivity : BaseActivity() {
                             1 -> {
                                 addrDao.deleteForAbs("UUID", data.UUID)
                                 refreshDatas()
+                            }
+                            2 -> {
+                                changeDefaultAddress(data)
                             }
                         }
                     }
@@ -94,6 +97,16 @@ class AddressActivity : BaseActivity() {
             vertical(this@AddressActivity)
             this.adapter = this@AddressActivity.adapter
         }
+    }
+
+    private fun changeDefaultAddress(data: Address) {
+        datas.forEach {
+            it.default = "false"
+            if (it.UUID == data.UUID)
+                it.default = "true"
+            addrDao.updateForAbs("UUID", it.UUID, Pair("json", anyToJson(it)))
+        }
+        refreshDatas()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    tools:context="cn.zhaoshuhao.kotlinfirst.ui.activity.LoginActivity">
+
+    <TextView
+        android:id="@+id/id_login_tv_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:layout_margin="20dp"
+        android:text="注册"
+        android:textColor="@color/white"
+        android:textSize="20dp"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/id_mine_civ_head"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_lock_white_24dp"/>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/id_login_et_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        android:hint="手机号"
+        android:inputType="number"
+        android:textSize="22dp"
+        app:met_baseColor="@color/white"
+        app:met_bottomTextSize="16dp"
+        app:met_errorColor="#ff0000"
+        app:met_floatingLabel="highlight"
+        app:met_floatingLabelTextSize="20dp"
+        app:met_helperText="请输入11位手机号码"
+        app:met_helperTextColor="@color/white"
+        app:met_maxCharacters="11"
+        app:met_minCharacters="11"
+        app:met_primaryColor="@color/white"
+        app:met_textColor="@color/white"
+        app:met_textColorHint="@color/white"
+        app:met_underlineColor="@color/white"/>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/id_login_et_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="密码"
+        android:inputType="textPassword"
+        android:textSize="22dp"
+        app:met_baseColor="@color/white"
+        app:met_bottomTextSize="16dp"
+        app:met_errorColor="#ff0000"
+        app:met_floatingLabel="highlight"
+        app:met_floatingLabelTextSize="20dp"
+        app:met_helperText="请输入密码（只包含数字和英文）"
+        app:met_helperTextColor="@color/white"
+        app:met_maxCharacters="12"
+        app:met_minCharacters="6"
+        app:met_primaryColor="@color/white"
+        app:met_textColor="@color/white"
+        app:met_textColorHint="@color/white"
+        app:met_underlineColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/id_login_tv_forgot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:layout_margin="26dp"
+        android:text="忘记密码？"
+        android:textColor="@color/white"
+        android:textSize="20dp"/>
+
+    <Button
+        android:id="@+id/id_login_btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/login_btn_selecter"
+        android:text="登录"
+        android:textColor="@color/white"
+        android:textSize="30dp"/>
+
+</LinearLayout>
