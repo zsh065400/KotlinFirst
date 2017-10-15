@@ -1,6 +1,7 @@
 package cn.zhaoshuhao.kotlinfirst.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Paint
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -41,6 +42,10 @@ class AddressAdapter(context: Context, datas: ArrayList<Address>, listener: Base
                 person.text = "收货人：${addr.name}"
                 phone.text = addr.phone
                 address.text = "地址：${addr.part.trim()}${addr.detail.trim()}"
+
+                if (position == 0 && addr.default == "true") {
+                    holder.root.setBackgroundColor(Color.parseColor("#FFEBEBEB"))
+                }
             }
         }
     }

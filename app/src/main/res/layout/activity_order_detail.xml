@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="cn.zhaoshuhao.kotlinfirst.ui.activity.OrderDetailActivity">
+
+    <include
+        android:id="@+id/id_order_detail_toolbar"
+        layout="@layout/toolbar"/>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/id_order_detail_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabGravity="fill"
+        app:tabBackground="@color/colorPrimary"
+        app:tabIndicatorColor="@color/white"
+        app:tabSelectedTextColor="@color/tabTextNormal"
+        app:tabTextColor="@color/white"
+        >
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/tab_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="全部"/>
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/tab_paydone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="已付款"/>
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/tab_nopay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="待付款"/>
+    </android.support.design.widget.TabLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/id_order_detail_vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
+
+</LinearLayout>

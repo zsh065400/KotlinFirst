@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/id_pd_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:fitsSystemWindows="true"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/id_mine_civ_head"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/ic_launcher_round"/>
+
+        <TextView
+            android:id="@+id/id_mine_tv_nick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:text="您还没有登录哦"
+            android:textColor="@color/white"
+            android:textSize="22dp"/>
+
+        <View
+            android:id="@+id/id_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/white"
+        android:translationZ="3dp"
+        app:cardCornerRadius="5dp"
+        app:layout_anchor="@id/id_holder"
+        app:layout_anchorGravity="bottom">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <Button
+                android:id="@+id/id_mine_btn_order"
+                style="@style/MyButtonOnMine"
+                android:drawableTop="@drawable/ic_order_black_24dp"
+                android:text="订单"/>
+
+            <Button
+                android:id="@+id/id_mine_btn_star"
+                style="@style/MyButtonOnMine"
+                android:drawableTop="@drawable/ic_star_border_black_24dp"
+                android:text="收藏"/>
+
+            <Button
+                android:id="@+id/id_mine_btn_history"
+                style="@style/MyButtonOnMine"
+                android:drawableTop="@drawable/ic_schedule_black_24dp"
+                android:text="最近"/>
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/id_mine_tv_nopay"
+                style="@style/ListTextView"
+                android:drawableLeft="@drawable/user_listicon_daifukuan"
+                android:text="待付款"/>
+
+            <TextView
+                android:id="@+id/id_mine_tv_paydone"
+                style="@style/ListTextView"
+                android:drawableLeft="@drawable/user_listicon_yifukuan"
+                android:text="已付款"/>
+
+            <TextView
+                style="@style/ListTextView"
+                android:drawableLeft="@drawable/user_listicon_choujiang"
+                android:text="抽奖"/>
+
+            <TextView
+                style="@style/ListTextView"
+                android:drawableLeft="@drawable/user_generdisplay_img"
+                android:text="夺宝"/>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

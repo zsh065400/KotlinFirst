@@ -19,7 +19,7 @@ const val YOUR_LIKE_DETAIL = "{goods_id}.txt"
 
 const val HOT_FILM = "filmHot_refresh.txt"
 
-const val MY_API = "http://192.168.1.111:11761/"
+const val MY_API = "http://192.168.1.111:8080/"
 
 const val BANNER = "LaShouO2O/banner.do"
 

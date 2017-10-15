@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
 import android.view.Menu
@@ -110,4 +111,10 @@ inline fun <reified other : Context> Activity.toActivityForResult(bundle: Bundle
     val options = ActivityOptionsCompat.makeCustomAnimation(this,
             R.anim.fade_in, R.anim.fade_out)
     ActivityCompat.startActivityForResult(this, target, requestCode, options.toBundle())
+}
+
+inline fun <reified other : Context> Fragment.toActivityForResult(requestCode: Int) {
+    val target = Intent(activity, other::class.java)
+    activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+    startActivityForResult(target, requestCode)
 }

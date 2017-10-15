@@ -255,6 +255,7 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
                 menu?.findItem(R.id.id_main_location)?.isVisible = true
                 menu?.findItem(R.id.id_main_map)?.isVisible = false
                 menu?.findItem(R.id.id_main_delete)?.isVisible = false
+                menu?.findItem(R.id.id_main_settings)?.isVisible = false
             }
             1 -> {
                 menu?.findItem(R.id.id_main_search)?.isVisible = false
@@ -262,6 +263,7 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
                 menu?.findItem(R.id.id_main_location)?.isVisible = false
                 menu?.findItem(R.id.id_main_map)?.isVisible = true
                 menu?.findItem(R.id.id_main_delete)?.isVisible = false
+                menu?.findItem(R.id.id_main_settings)?.isVisible = false
             }
             2 -> {
                 menu?.findItem(R.id.id_main_search)?.isVisible = false
@@ -269,13 +271,15 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
                 menu?.findItem(R.id.id_main_location)?.isVisible = false
                 menu?.findItem(R.id.id_main_map)?.isVisible = false
                 menu?.findItem(R.id.id_main_delete)?.isVisible = true
+                menu?.findItem(R.id.id_main_settings)?.isVisible = false
             }
-            else -> {
+            3 -> {
                 menu?.findItem(R.id.id_main_search)?.isVisible = false
                 menu?.findItem(R.id.id_main_scan)?.isVisible = false
                 menu?.findItem(R.id.id_main_location)?.isVisible = false
                 menu?.findItem(R.id.id_main_map)?.isVisible = false
                 menu?.findItem(R.id.id_main_delete)?.isVisible = false
+                menu?.findItem(R.id.id_main_settings)?.isVisible = true
             }
         }
         return true

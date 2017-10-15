@@ -1,8 +1,11 @@
 package cn.zhaoshuhao.kotlinfirst.contract
 
 import android.content.Context
+import cn.bmob.v3.BmobUser
+import cn.zhaoshuhao.kotlinfirst.model.bean.User
 import cn.zhaoshuhao.kotlinfirst.model.db.KCartDao
 import cn.zhaoshuhao.kotlinfirst.utils.*
+import org.jetbrains.anko.toast
 import cn.zhaoshuhao.kotlinfirst.model.bean.ShoppingCart as CartData
 
 /**
@@ -52,6 +55,10 @@ class CartPresent(val context: Context) : ShoppingCart.Present {
     }
 
     override fun doBuyAction() {
+        if (BmobUser.getCurrentUser(User::class.java) == null) {
+            context.toast("请先登录")
+            return
+        }
         if (cartData != null && cartData!!.size > 0) {
             val filter = cartData!!.filter { it.checked }.toArrayList()
             val size = filter.size

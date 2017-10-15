@@ -9,6 +9,20 @@ import android.database.sqlite.SQLiteDatabase
  * Created by Scout
  * Created on 2017/9/6 19:01.
  */
+class KHistoryDao(context: Context) : BaseDao(context) {
+    companion object {
+        private var insstance: KHistoryDao? = null
+
+        fun get(context: Context): KHistoryDao {
+            if (insstance == null) insstance = KHistoryDao(context)
+            return insstance!!
+        }
+    }
+
+    override val tableName: String
+        get() = "history"
+}
+
 class KAddressDao(context: Context) : BaseDao(context) {
     companion object {
         private var instance: KAddressDao? = null
@@ -84,7 +98,8 @@ abstract class BaseDao(val context: Context) {
         for ((key, value) in bundle) {
             contentValues.put(key, value)
             if (contentValues.size() == 2) {
-                database?.insert(tableName, null, contentValues)
+                val insert = database?.insert(tableName, null, contentValues)
+                println("insert result $insert")
                 contentValues.clear()
             }
         }

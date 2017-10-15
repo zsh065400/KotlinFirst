@@ -39,7 +39,7 @@ class GalleryAdapter(context: Context, private val datas: List<String>) : BasePa
     }
 }
 
-class ItemAdapter(context: Context, val grids: List<View>) : BasePagerAdapter(context) {
+class ItemAdapter(context: Context, val grids: List<View>, val titles: List<String> = listOf()) : BasePagerAdapter(context) {
     init {
         grids.forEach {
             mViews.add(it)
@@ -48,6 +48,10 @@ class ItemAdapter(context: Context, val grids: List<View>) : BasePagerAdapter(co
 
     override fun getCount(): Int {
         return grids.size
+    }
+
+    override fun getPageTitle(position: Int): CharSequence {
+        return if (titles.isEmpty() || titles.size < grids.size) super.getPageTitle(position) else titles[position]
     }
 
 }

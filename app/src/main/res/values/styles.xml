@@ -68,4 +68,26 @@
         <item name="android:colorControlActivated">@color/colorAccent</item>
         <item name="android:colorControlNormal">@android:color/darker_gray</item>
     </style>
+
+    <style name="MyButtonOnMine">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@null</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:paddingTop">5dp</item>
+    </style>
+
+    <style name="ListTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawableRight">@drawable/ic_right_black_24dp</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textSize">18dp</item>
+    </style>
+
+
 </resources>

@@ -45,9 +45,10 @@ class AddressEditActivity : BaseActivity() {
             val phone = id_edit_et_phone.text.toString() ?: ""
             val part = id_edit_et_part.text.toString() ?: ""
             val detail = id_edit_et_detail.text.toString() ?: ""
+            val default = "false"
             if (person.isNotBlank() && phone.isNotBlank() && part.isNotBlank() && detail.isNotBlank()) {
                 if (UUID != null) {
-                    val addr = Address(UUID!!, person, phone, part, detail)
+                    val addr = Address(UUID!!, person, phone, part, detail, default)
                     addrDao.updateForAbs("UUID", UUID!!, Pair("json", anyToJson(addr)))
                     setResult(6)
                 } else {
