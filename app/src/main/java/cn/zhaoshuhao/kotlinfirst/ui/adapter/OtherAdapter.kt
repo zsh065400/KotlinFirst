@@ -7,7 +7,7 @@ import cn.zhaoshuhao.kotlinfirst.R
 import cn.zhaoshuhao.kotlinfirst.adapter.BaseSupportAdapter
 import cn.zhaoshuhao.kotlinfirst.model.bean.History
 import cn.zhaoshuhao.kotlinfirst.model.bean.Star
-import cn.zhaoshuhao.kotlinfirst.utils.load
+import cn.zhaoshuhao.kotlinfirst.utils.loadUrl
 
 /**
  * Created by Scout
@@ -26,7 +26,7 @@ class StarAdapter(context: Context, datas: ArrayList<Star>, listener: BaseSuppor
 
                 title.text = history.title
                 price.text = "￥${history.price}"
-                thumb.load(context, history.imgUrl)
+                thumb.loadUrl(context, history.imgUrl)
             }
         }
     }
@@ -45,7 +45,7 @@ class HistoryAdapter(context: Context, datas: ArrayList<History>, listener: Base
 
                 title.text = history.title
                 price.text = "￥${history.price}"
-                thumb.load(context, history.imgUrl)
+                thumb.loadUrl(context, history.imgUrl)
             }
         }
     }

@@ -23,8 +23,12 @@ import org.jetbrains.anko.alert
 class StarActivity : BaseActivity() {
     override fun obtainLayoutID(): Int = R.layout.activity_star
 
+    val user: User
+        get() = BmobUser.getCurrentUser(User::class.java)
+
     override fun beforeInitViews() {
         val query = BmobQuery<Star>()
+        query.addWhereEqualTo("user", user)
         query.findObjects(object : FindListener<Star>() {
             override fun done(list: MutableList<Star>?, e: BmobException?) {
                 if (e != null || list?.size == 0)
@@ -52,7 +56,7 @@ class StarActivity : BaseActivity() {
             override fun onLongClick(view: View, data: Star, position: Int) {
                 with(alert("是否取消收藏", "取消收藏")) {
                     positiveButton("确定") {
-                        val star = Star(BmobUser.getCurrentUser(User::class.java))
+                        val star = Star(user)
                         star.objectId = data.objectId
                         star.delete(object : UpdateListener() {
                             override fun done(e: BmobException?) {

@@ -8,9 +8,9 @@ import cn.bmob.v3.datatype.BmobFile
  * Created by Scout
  * Created on 2017/9/29 18:02.
  */
-data class User(val head: BmobFile? = null, val nick: String = "",
-                val sex: String = "", val address: String = "",
-                val age: String) : BmobUser()
+data class User(var head: BmobFile? = null, var nick: String = "",
+                var sex: String = "", var address: String = "",
+                var age: String) : BmobUser()
 
 /*订单表，商品列表使用ShoppingCart*/
 data class Order(val user: User,

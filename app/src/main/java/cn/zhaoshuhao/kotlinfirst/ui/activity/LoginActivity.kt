@@ -19,8 +19,8 @@ import cn.zhaoshuhao.kotlinfirst.base.BaseActivity
 import cn.zhaoshuhao.kotlinfirst.base.toast
 import cn.zhaoshuhao.kotlinfirst.model.bean.User
 import cn.zhaoshuhao.kotlinfirst.utils.doEncrypt
-import cn.zhaoshuhao.kotlinfirst.utils.encrypt
 import cn.zhaoshuhao.kotlinfirst.utils.findViewOften
+import cn.zhaoshuhao.kotlinfirst.utils.obtain
 import com.rengwuxian.materialedittext.MaterialEditText
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.alert
@@ -49,12 +49,12 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun login() {
-        val phone = id_login_et_phone.text.toString().trim().doEncrypt()
-        val pwd = id_login_et_pwd.text.toString().trim().doEncrypt()
+        val phone = id_login_et_phone.obtain().doEncrypt()
+        val pwd = id_login_et_pwd.obtain().doEncrypt()
         logd("$phone, $pwd")
         if (!phone.isNullOrBlank() && !pwd.isNullOrBlank()) {
             val user = User(null, "", "", "", "")
-            user.username = phone
+            user.setUsername(phone)
             user.setPassword(pwd)
             user.login(object : SaveListener<User>() {
                 override fun done(p0: User?, e: BmobException?) {
@@ -117,7 +117,7 @@ class LoginActivity : BaseActivity() {
             val editText = view.findViewOften<MaterialEditText>(R.id.id_register_et_content)
             val b = editText.isValid("\\d{6}")
             if (b) {
-                code = editText.text.trim().toString()
+                code = editText.obtain()
                 verifySMSCode(phone, code)
             } else {
                 toast("验证码错误")
@@ -191,7 +191,7 @@ class LoginActivity : BaseActivity() {
             val editText = view.findViewOften<MaterialEditText>(R.id.id_register_et_content)
             val b = editText.isValid("[a-zA-Z0-9]{6,12}")
             if (b) {
-                password = editText.text.toString().trim()
+                password = editText.obtain()
                 registerDone()
             } else {
                 toast("密码为空或不符合规则")
@@ -206,8 +206,8 @@ class LoginActivity : BaseActivity() {
     * */
     private fun registerDone() {
         val user = User(null, "", "", "", "")
-        user.username = encrypt(phone)
-        user.setPassword(encrypt(password))
+        user.setUsername(phone.doEncrypt())
+        user.setPassword(password.doEncrypt())
         user.mobilePhoneNumber = phone
         user.mobilePhoneNumberVerified = true
         user.signUp(object : SaveListener<User>() {
@@ -218,6 +218,8 @@ class LoginActivity : BaseActivity() {
                     inputDialog!!.dismiss()
                     id_login_et_phone.setText(phone)
                     id_login_et_pwd.setText(password)
+                    /*清除注册的信息，保证注册后不会缓存用户信息*/
+                    BmobUser.logOut()
                 } else {
                     logd("${e.errorCode} ${e.localizedMessage}")
                 }

@@ -132,7 +132,8 @@ class CartFragment : BaseFragment(), ShoppingCart.View {
     }
 
     fun onRemoveData() {
-        if (adapter != null && adapter!!.itemCount > 0)
+        if (adapter != null && adapter!!.itemCount > 0
+                && adapter!!.datas.any { it.checked })
             with(alert("是否删除这些商品", "提示")) {
                 positiveButton("确认") { cartPresent.removeCartData() }
                 negativeButton("取消") {}
