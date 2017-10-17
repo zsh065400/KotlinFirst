@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "cn.zhaoshuhao.kotlinfirst"
@@ -12,14 +12,22 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "arm64-v8a", "x86_64"
         }
     }
     dexOptions {
-        javaMaxHeapSize "4g"
+        //使用增量模式构建
+        incremental true
+        //最大堆内存
+        javaMaxHeapSize "3g"
+        //是否支持大工程模式
+        jumboMode = true
+        //预编译
+        preDexLibraries = true
+        //线程数
+        threadCount = 8
     }
     buildTypes {
         release {
@@ -28,31 +36,29 @@ android {
         }
     }
 
-    productFlavors {
-        free {
-            versionName "1.0-free"
-        }
+//    productFlavors {
+//        free {
+//            versionName "1.0-free"
+//        }
+//    }
+
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
     }
 
-    sourceSets {
+//    sourceSets {
 //        main.java.srcDirs += 'src/main/kotlin'
 //        main.jniLibs.srcDirs = ['libs']
-    }
+//    }
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    //    compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
-    //    compile("com.github.hotchemi:permissionsdispatcher:${permission_version}") {
-    // if you don't use android.app.Fragment you can exclude support for them
-    //        exclude module: "support-v13"
-    //    }
-    //    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:${permission_version}"
-    //    compile('com.github.hotchemi:permissionsdispatcher:2.4.0') { exclude module: 'support-v13' }
-    //    kapt 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
-    compile project(':citypickerview')
     compile "org.jetbrains.anko:anko:$anko_version"
+
+    compile project(':citypickerview')
+
     compile files('libs/MobCommons-2017.0914.1125.jar')
     compile files('libs/MobTools-2017.0914.1125.jar')
     compile files('libs/ShareSDK-Core-3.1.0.jar')
@@ -62,38 +68,35 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-3.1.0.jar')
     compile files('libs/ShareSDK-Wechat-Core-3.1.0.jar')
     compile files('libs/ShareSDK-Wechat-Moments-3.1.0.jar')
+
     compile files('libs/tbs_sdk_thirdapp_v3.1.0.1034_43100_sharewithdownload_obfs_20170301_182143.jar')
+
+    compile 'cn.bmob.android:bmob-sdk:3.5.7'
     compile files('libs/BmobPay_v3.2.0_170602.jar')
-    //    compile 'io.reactivex.rxjava2:rxkotlin:2.1.0'
-    //    compile 'io.reactivex.rxjava2:rxjava:2.1.2'
-    //    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    //    compile 'com.hwangjr.rxbus:rxbus:2.0.0'
-    //    compile 'com.android.support:palette-v7:26.0.0-alpha1'
-    //    compile files('libs/BmobSMS_V1.2.2_20170303.jar')
-    //    compile 'cn.bmob.android:bmob-newssms:1.2.2'
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support:cardview-v7:26.+'
-    compile 'com.android.support:recyclerview-v7:26.+'
+
+    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    compile 'com.android.support:cardview-v7:26.0.0-alpha1'
+    compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
     compile 'com.android.support:design:26.0.0-alpha1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
     compile 'com.ashokvarma.android:bottom-navigation-bar:2.0.2'
     compile 'com.google.code.gson:gson:2.8.1'
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
+
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.github.bumptech.glide:glide:4.0.0'
-    compile 'com.j256.ormlite:ormlite-android:5.0'
-    compile 'com.j256.ormlite:ormlite-core:5.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
+
     compile 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
     compile 'cn.bingoogolapple:bga-zbar:1.1.7@aar'
+
     compile 'com.amap.api:location:latest.integration'
+
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
-    compile 'cn.bmob.android:bmob-sdk:3.5.7'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
-}
-//apply plugin: 'kotlin-kapt'
 
-//repositories {
-//    mavenCentral()
-//}
+    compile 'com.bilibili:boxing-impl:1.0.0'
+    compile 'com.github.yalantis:ucrop:2.2.1'
+}

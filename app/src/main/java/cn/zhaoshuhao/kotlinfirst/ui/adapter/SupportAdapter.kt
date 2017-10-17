@@ -18,7 +18,7 @@ import cn.zhaoshuhao.kotlinfirst.model.network.entity.Around
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Film
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.GuessYouLike
 import cn.zhaoshuhao.kotlinfirst.utils.findViewOften
-import cn.zhaoshuhao.kotlinfirst.utils.load
+import cn.zhaoshuhao.kotlinfirst.utils.loadUrl
 import cn.zhaoshuhao.kotlinfirst.utils.obtainDefault
 import cn.zhaoshuhao.kotlinfirst.widget.CartNumberChanged
 import com.bumptech.glide.Glide
@@ -64,7 +64,7 @@ class OrderAdapter(context: Context, datas: ArrayList<ShoppingCart>, listener: B
                 val price = findView<TextView>(R.id.id_order_tv_price)
                 val num = findView<TextView>(R.id.id_order_tv_num)
 
-                icon.load(context, cart.img)
+                icon.loadUrl(context, cart.img)
                 name.text = cart.name
                 price.text = cart.price
                 num.text = "x${cart.num}"
@@ -97,7 +97,7 @@ class CartAdapter(context: Context, datas: ArrayList<ShoppingCart>, listener: Ba
                     changedCallback?.invoke(view, value, cart)
                 }
 
-                icon.load(context, cart.img)
+                icon.loadUrl(context, cart.img)
                 name.text = cart.name
                 price.text = cart.price
                 value.text = cart.value
@@ -132,7 +132,7 @@ class AroundInfoAdapter(context: Context, datas: ArrayList<Around>, listener: Ba
                 val delivery = findView<TextView>(R.id.id_around_delivery)
                 val image = findView<ImageView>(R.id.id_around_image)
 
-                image.load(context, around.img)
+                image.loadUrl(context, around.img)
                 title.text = around.name
                 price.text = around.price.toString()
                 origin.text = around.origin.toString()
@@ -157,7 +157,7 @@ class YourLikeAdapter(context: Context, datas: ArrayList<GuessYouLike>, listener
                 val value = findView<TextView>(R.id.id_ylike_value)
                 val bought = findView<TextView>(R.id.id_ylike_bought)
                 val imageUrl = youLike.images[2].image
-                imageView.load(context, imageUrl)
+                imageView.loadUrl(context, imageUrl)
 
                 product.text = youLike.product
                 title.text = youLike.title

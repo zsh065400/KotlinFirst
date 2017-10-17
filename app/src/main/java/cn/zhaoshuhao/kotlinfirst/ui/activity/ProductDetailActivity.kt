@@ -29,7 +29,7 @@ import cn.zhaoshuhao.kotlinfirst.model.network.entity.GuessYouLike
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.ProductDetail
 import cn.zhaoshuhao.kotlinfirst.utils.anyToJson
 import cn.zhaoshuhao.kotlinfirst.utils.jsonToAny
-import cn.zhaoshuhao.kotlinfirst.utils.load
+import cn.zhaoshuhao.kotlinfirst.utils.loadUrl
 import cn.zhaoshuhao.kotlinfirst.utils.transparentStatusBar
 import kotlinx.android.synthetic.main.activity_product_detail.*
 
@@ -215,7 +215,7 @@ class ProductDetailActivity : BaseActivity(), Detail.View {
 
     override fun showDeatilInfo(data: ProductDetail) {
         val result = data.result
-        id_detail_iv_image.load(this@ProductDetailActivity, result.images[0].image)
+        id_detail_iv_image.loadUrl(this@ProductDetailActivity, result.images[0].image)
         id_detail_iv_image.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable("images", result)
@@ -242,11 +242,17 @@ class ProductDetailActivity : BaseActivity(), Detail.View {
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         btnStar = menu?.findItem(R.id.id_detail_star)!!
-        if (user == null){
+        if (user == null) {
             return super.onPrepareOptionsMenu(menu)
         }
+        val query1 = BmobQuery<Star>()
+        val query2 = BmobQuery<Star>()
+        query1.addWhereEqualTo("title", product.product)
+        query2.addWhereEqualTo("user", user)
+        val querys = arrayListOf(query1, query2)
+
         val query = BmobQuery<Star>()
-        query.addWhereEqualTo("title", product.product)
+        query.and(querys)
         query.include("user")
         query.findObjects(object : FindListener<Star>() {
             override fun done(res: MutableList<Star>?, e: BmobException?) {

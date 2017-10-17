@@ -17,3 +17,4 @@ fun RequestManager.obtainDefault(): RequestOptions = RequestOptions()
         .priority(Priority.NORMAL)
         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
 
+

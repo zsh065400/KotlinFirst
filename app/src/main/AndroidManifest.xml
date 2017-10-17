@@ -36,6 +36,7 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
     <!-- 更改设置 -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:name=".app.ScoutApplication"
@@ -45,6 +46,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:grantUriPermissions="true"
+            android:authorities="${applicationId}.file.provider">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/boxing_file_provider"/>
+        </provider>
+
         <activity android:name=".ui.activity.MainActivity">
         </activity>
         <activity
@@ -148,6 +158,13 @@
         </activity>
         <activity android:name=".ui.activity.OrderDetailActivity">
         </activity>
+        <activity android:name=".ui.activity.PersonalInfoActivity">
+        </activity>
+        <!--UCrop-->
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
 
 </manifest>

@@ -17,8 +17,12 @@ import android.support.v7.widget.Toolbar
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.Menu
+import cn.bmob.v3.BmobUser
 import cn.zhaoshuhao.kotlinfirst.R
-import cn.zhaoshuhao.kotlinfirst.base.*
+import cn.zhaoshuhao.kotlinfirst.base.BaseActivity
+import cn.zhaoshuhao.kotlinfirst.base.CheckoutToolbar
+import cn.zhaoshuhao.kotlinfirst.base.checkout
+import cn.zhaoshuhao.kotlinfirst.base.toActivity
 import cn.zhaoshuhao.kotlinfirst.contract.AroundPresent
 import cn.zhaoshuhao.kotlinfirst.contract.CartPresent
 import cn.zhaoshuhao.kotlinfirst.contract.MainPresent
@@ -26,6 +30,7 @@ import cn.zhaoshuhao.kotlinfirst.fragment.ARoundFragment
 import cn.zhaoshuhao.kotlinfirst.fragment.CartFragment
 import cn.zhaoshuhao.kotlinfirst.fragment.MainFragment
 import cn.zhaoshuhao.kotlinfirst.fragment.MineFragment
+import cn.zhaoshuhao.kotlinfirst.model.bean.User
 import cn.zhaoshuhao.kotlinfirst.model.bean.WebViewInfo
 import cn.zhaoshuhao.kotlinfirst.model.db.KDbHelper
 import cn.zhaoshuhao.kotlinfirst.model.db.KSearchDao
@@ -39,6 +44,7 @@ import com.lljjcoder.citylist.CityListSelectActivity
 import com.lljjcoder.citylist.bean.CityInfoBean
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
+import org.jetbrains.anko.toast
 
 
 class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
@@ -128,6 +134,11 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
                     (mTabTarget[2] as CartFragment).onRemoveData()
                     true
                 }
+                R.id.id_main_settings -> {
+                    if (BmobUser.getCurrentUser(User::class.java) != null) toActivity<PersonalInfoActivity>()
+                    else toast("请先登录")
+                    true
+                }
                 else -> false
             }
         }
@@ -191,8 +202,8 @@ class MainActivity : BaseActivity(), CheckoutToolbar, IRefreshListener {
 
     private fun initNavigationView() = with(id_main_navigation as NavigationView) {
         setNavigationItemSelectedListener {
-            toast("${it.itemId}");
-            id_main_drawer.closeDrawer(Gravity.START)
+            toast("${it.title}")
+            id_main_drawer?.closeDrawer(Gravity.START)
             true
         }
     }

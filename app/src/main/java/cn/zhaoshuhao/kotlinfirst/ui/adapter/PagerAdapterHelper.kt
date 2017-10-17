@@ -13,7 +13,7 @@ import cn.zhaoshuhao.kotlinfirst.model.bean.WebViewInfo
 import cn.zhaoshuhao.kotlinfirst.model.network.entity.Banner
 import cn.zhaoshuhao.kotlinfirst.ui.activity.MainActivity
 import cn.zhaoshuhao.kotlinfirst.ui.activity.WebViewActivity
-import cn.zhaoshuhao.kotlinfirst.utils.load
+import cn.zhaoshuhao.kotlinfirst.utils.loadUrl
 import cn.zhaoshuhao.kotlinfirst.utils.obtainDefault
 import com.bumptech.glide.Glide
 
@@ -29,7 +29,7 @@ class GalleryAdapter(context: Context, private val datas: List<String>) : BasePa
         datas.forEach {
             val inflate = LayoutInflater.from(context).inflate(R.layout.gallery_imageview, null, false)
             val imageView = inflate.findViewById<ImageView>(R.id.id_iv_gallery)
-            imageView.load(context, it)
+            imageView.loadUrl(context, it)
             mViews.add(inflate)
         }
     }

@@ -13,7 +13,7 @@ fun encrypt(s: String): String {
     if (TextUtils.isEmpty(s)) {
         return ""
     }
-    return Base64.encodeToString(s.toByteArray(Charsets.UTF_8), Base64.DEFAULT);
+    return Base64.encodeToString(s.toByteArray(Charsets.UTF_8), Base64.DEFAULT).trim();
 }
 
 fun String.doEncrypt(): String = encrypt(this)

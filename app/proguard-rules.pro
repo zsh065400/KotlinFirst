@@ -27,3 +27,7 @@
 -keepclasseswithmembers class c.b.** { *; }
 -keep interface c.b.PListener{ *; }
 -keep interface c.b.QListener{ *; }
+
+-dontwarn com.yalantis.ucrop**
+-keep class com.yalantis.ucrop** { *; }
+-keep interface com.yalantis.ucrop** { *; }

@@ -41,6 +41,7 @@ class ARoundFragment : BaseFragment(), Around.View {
     override fun initAroundInfo(info: ArrayList<cn.zhaoshuhao.kotlinfirst.model.network.entity.Around>) {
         println("调用")
         id_around_rv_content.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        id_around_rv_content.isNestedScrollingEnabled = false
         adapter = AroundInfoAdapter(context, info, object : BaseSupportAdapter.OnItemClickListener<cn.zhaoshuhao.kotlinfirst.model.network.entity.Around> {
             override fun onClick(view: View, data: cn.zhaoshuhao.kotlinfirst.model.network.entity.Around, position: Int) {
                 context.toast(tk[(Math.random() * 6).toInt()])

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.util.SparseArray
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import cn.zhaoshuhao.kotlinfirst.R
@@ -23,6 +24,8 @@ import com.tencent.smtt.sdk.WebViewClient
  * Created by Scout
  * Created on 2017/7/28 19:53.
  */
+
+fun EditText.obtain() = this.text.trim().toString()
 
 fun Context.dp2px(dp: Int): Float {
     val metrics = resources.displayMetrics
@@ -62,8 +65,8 @@ fun AppCompatActivity.defaultToolbarOptions(toolbar: Toolbar, title: String, nav
     }
 }
 
-fun ImageView.load(context: Context, imageUrl: String) = with(Glide.with(context)) {
-    load(imageUrl).apply(obtainDefault()).into(this@load)
+fun ImageView.loadUrl(context: Context, imageUrl: String) = with(Glide.with(context)) {
+    load(imageUrl).apply(obtainDefault()).into(this@loadUrl)
 }
 
 /*
